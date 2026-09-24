@@ -1,0 +1,39 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "timezone": "Europe/Madrid",
+  "labels": ["dependencies"],
+  "schedule": ["before 10am on monday"],
+  "rangeStrategy": "bump",
+  "dependencyDashboard": true,
+  "semanticCommits": "enabled",
+  "rebaseWhen": "behind-base-branch",
+  "enabledManagers": ["maven", "github-actions"],
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["security"]
+  },
+  "packageRules": [
+    {
+      "description": "Agrupar y automergear patch+minor de GitHub Actions. Requiere CI verde.",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "GitHub Actions (non-major)",
+      "automerge": true,
+      "automergeType": "pr",
+      "addLabels": ["dependencies"]
+    },
+    {
+      "description": "Maven: nunca automerge. Este fork firma documentos; revisar BC/iText/xmlsec a mano.",
+      "matchManagers": ["maven"],
+      "automerge": false,
+      "labels": ["dependencies"]
+    },
+    {
+      "description": "Majors: siempre revisión manual.",
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "labels": ["dependencies", "breaking-change"]
+    }
+  ]
+}

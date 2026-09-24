@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Vulnerabilidad de seguridad
+    url: https://github.com/Alexendros/clienteafirma/security/advisories/new
+    about: No abras un issue público. Sigue SECURITY.md.
+  - name: Cliente oficial CTT
+    url: https://github.com/ctt-gob-es/clienteafirma
+    about: Upstream del producto. Este repo es un fork personal.
+  - name: Autofirma-2026
+    url: https://github.com/Alexendros/Autofirma-2026
+    about: Programa comunitario (vectores, empaquetado, docs ciudadanas).

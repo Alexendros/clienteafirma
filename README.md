@@ -1,5 +1,13 @@
 # ![Logo de la Suite @firma](logo_autofirma.png)
 
+### Propósito de este documento
+
+- **Objetivos:** Presentar Autofirma / Cliente @firma y cómo construir los módulos Maven sin reescribir el árbol upstream.
+- **Estructura:** Producto → construcción (perfiles Maven) → módulos vigentes y obsoletos.
+- **Contenido a integrar según contexto:** Conserva el stack Java 8 + Maven y las licencias GPL-2.0+ / EUPL-1.1 de CTT. No copies un README de SaaS. El rescate comunitario, vectores F2 y empaquetado viven en [Autofirma-2026](https://github.com/Alexendros/Autofirma-2026).
+
+> **Este repositorio** es un fork personal de [ctt-gob-es/clienteafirma](https://github.com/ctt-gob-es/clienteafirma) (línea de producto **1.9.1**). No sustituye al cliente oficial.
+
 Autofirma es uno de los productos de la **Suite @firma** de soluciones de identificación y firma electrónica. Se proporciona a las Administraciones Públicas para que dispongan de los instrumentos necesarios para implementar la autenticación y firma electrónica avanzada de una forma rápida y efectiva.
 
 Autofirma es una herramienta de firma electrónica en entornos de escritorio y dispositivos móviles, que funciona en forma de Applet de Java integrado en una página Web mediante JavaScript, como aplicación de escritorio, o como aplicación móvil, dependiendo del entorno del usuario.
@@ -120,3 +128,12 @@ La lista de módulos obsoletos y/o sin soporte que se conservan en el repositori
 * `afirma-windows-store`: __Obsoleto.__ Módulo principal del antiguo cliente de firma para Windows 8.
 
 **No se ofrece ningún tipo de mantenimiento ni soporte sobre estos módulos.**
+
+---
+
+## Gobernanza de este fork
+
+- [CONTRIBUTING.md](CONTRIBUTING.md) · [SECURITY.md](SECURITY.md) · [CHANGELOG.md](CHANGELOG.md) · [LICENSE](LICENSE)
+- Fachada local: `make lint`, `make test`, `make smoke`, `make build` (núcleo `afirma-core`).
+- CI: jobs `quality` / `test` / `build` / `smoke`. El empaquetado completo (`-Denv=install`) se documenta arriba y se ejecuta en [Autofirma-2026](https://github.com/Alexendros/Autofirma-2026).
+
