@@ -44,6 +44,11 @@ public class UrlHttpManagerImpl implements UrlHttpManager {
 	 * usa la confianza por defecto de la JVM. */
 	public static final String JAVA_PARAM_DISABLE_SSL_CHECKS = "disableSslChecks"; //$NON-NLS-1$
 
+	/** Si se establece a <code>true</code>, nunca se deshabilitan las comprobaciones SSL
+	 * (ni por dominio «seguro» ni por <code>disableSslChecks</code>). Por defecto <code>false</code>
+	 * para no romper sedes que dependen del modo permisivo. */
+	public static final String JAVA_PARAM_STRICT_SSL_CHECKS = "strictSslChecks"; //$NON-NLS-1$
+
 	/** Lista de dominios seguros para conexiones HTTPS. */
 	public static final String JAVA_PARAM_SECURE_DOMAINS_LIST = "secureDomainsList"; //$NON-NLS-1$
 
@@ -204,14 +209,16 @@ public class UrlHttpManagerImpl implements UrlHttpManager {
 				conn = (HttpURLConnection) uri.openConnection();
 			}
 
+			final boolean strictSsl = Boolean.parseBoolean(
+					System.getProperty(JAVA_PARAM_STRICT_SSL_CHECKS, Boolean.FALSE.toString()));
 			final String defaultSslCheck = System.getProperty(JAVA_PARAM_DISABLE_SSL_CHECKS, Boolean.FALSE.toString());
-			final boolean needDisableSslChecks = sslConfig == null && Boolean.parseBoolean(defaultSslCheck);
-			final boolean isSecureDomain = checkIsSecureDomain(uri);
+			final boolean needDisableSslChecks = !strictSsl && sslConfig == null && Boolean.parseBoolean(defaultSslCheck);
+			final boolean isSecureDomain = !strictSsl && checkIsSecureDomain(uri);
 
 			// Si se trata de una conexion SSL:
-			// - Si me indicaron que el dominio es seguro o que directamente noes necesario validad el certificado,
-			// desactivamos la validacion de la conexion.
-			// - Si se establecio una conefiguracion de conexion concreta, la aplicamos.
+			// - Con strictSslChecks=true nunca se desactiva la validacion (opt-in).
+			// - Si me indicaron que el dominio es seguro o disableSslChecks, desactivamos la validacion.
+			// - Si se establecio una configuracion de conexion concreta, la aplicamos.
 			if (conn instanceof HttpsURLConnection) {
 				if (needDisableSslChecks || isSecureDomain) {
 					try {
