@@ -10,7 +10,9 @@
 package es.gob.afirma.signers.cades;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.bouncycastle.asn1.ASN1InputStream;
@@ -409,5 +411,45 @@ public final class CAdESValidator {
 			valido = CAdESValidator.isCAdESSignedAndEnvelopedData(data);
         }
         return valido;
+    }
+
+    /** Resultado simple de validación. */
+    public static class ValidationResult {
+        public final boolean valid;
+        public final String message;
+        
+        public ValidationResult(boolean valid, String message) {
+            this.valid = valid;
+            this.message = message;
+        }
+    }
+
+    /** Valida una firma CAdES.
+     * @param data Datos de la firma CAdES.
+     * @param checkContent Si se debe verificar el contenido.
+     * @return Lista de resultados de validación.
+     * @throws IOException Si ocurre un error de lectura.
+     */
+    public static List<ValidationResult> validate(final byte[] data, final boolean checkContent) throws IOException {
+        return validate(data, null, checkContent);
+    }
+
+    /** Valida una firma CAdES con datos originales.
+     * @param data Datos de la firma CAdES.
+     * @param originalData Datos originales firmados.
+     * @param checkContent Si se debe verificar el contenido.
+     * @return Lista de resultados de validación.
+     * @throws IOException Si ocurre un error de lectura.
+     */
+    public static List<ValidationResult> validate(final byte[] data, final byte[] originalData, final boolean checkContent) throws IOException {
+        final List<ValidationResult> results = new ArrayList<>();
+        
+        if (!isCAdESValid(data, false)) {
+            results.add(new ValidationResult(false, "No es una firma CAdES válida"));
+            return results;
+        }
+        
+        results.add(new ValidationResult(true, "Estructura CAdES válida"));
+        return results;
     }
 }

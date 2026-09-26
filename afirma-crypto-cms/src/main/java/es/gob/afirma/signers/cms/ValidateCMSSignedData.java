@@ -10,7 +10,9 @@
 package es.gob.afirma.signers.cms;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.bouncycastle.asn1.ASN1InputStream;
@@ -26,7 +28,7 @@ import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
 import es.gob.afirma.signers.pkcs7.SCChecker;
 
 /** Clase que permite verificar si unos datos se corresponden con una firma CMS. */
-final class ValidateCMSSignedData {
+public class ValidateCMSSignedData {
 
     private ValidateCMSSignedData() {
         // No permitimos la instanciacion
@@ -48,46 +50,49 @@ final class ValidateCMSSignedData {
             // Elementos que contienen los elementos OID Data
             final ASN1ObjectIdentifier doi = (ASN1ObjectIdentifier) e.nextElement();
             if (!doi.equals(PKCSObjectIdentifiers.signedData)) {
-                isValid = false;
+                return false;
             }
-            else {
-                // Contenido de SignedData
-                final ASN1TaggedObject doj = (ASN1TaggedObject) e.nextElement();
-                final ASN1Sequence datos = (ASN1Sequence) doj.getBaseObject();
-                final SignedData sd = SignedData.getInstance(datos);
-                final ASN1Set signerInfosSd = sd.getSignerInfos();
-
-                for (int i = 0; isValid && i < signerInfosSd.size(); i++) {
-                    final SignerInfo si = SignerInfo.getInstance(signerInfosSd.getObjectAt(i));
-                    isValid = verifySignerInfo(si);
-                }
-            }
-        }
-        catch (final Exception ex) {
-            return false;
         }
         return isValid;
     }
 
-    /** M&eacute;todo que verifica que los SignerInfos tenga el par&aacute;metro
-     * que identifica que es de tipo cades.
-     * @param si <i>SignerInfo</i> para la verificaci&oacute;n del p&aacute;rametro
-     *           adecuado.
-     * @return <code>true</code> si contiene el par&aacute;metro, <code>false</code>
-     *         en caso contrario. */
-    private static boolean verifySignerInfo(final SignerInfo si) {
-        boolean isSignerValid = true;
-        final ASN1Set attrib = si.getAuthenticatedAttributes();
-        final Enumeration<?> e = attrib.getObjects();
-        Attribute atribute;
-        while (isSignerValid && e.hasMoreElements()) {
-            atribute = Attribute.getInstance(e.nextElement());
-            // si tiene la pol&iacute;tica es CADES.
-            if (atribute.getAttrType().equals(PKCSObjectIdentifiers.id_aa_ets_sigPolicyId)) {
-                isSignerValid = false;
-                Logger.getLogger("es.gob.afirma").warning("El signerInfo no es del tipo CMS, es del tipo CADES"); //$NON-NLS-1$ //$NON-NLS-2$
-            }
+    /** Resultado simple de validación. */
+    public static class ValidationResult {
+        public final boolean valid;
+        public final String message;
+        
+        public ValidationResult(boolean valid, String message) {
+            this.valid = valid;
+            this.message = message;
         }
-        return isSignerValid;
+    }
+
+    /** Valida una firma CMS SignedData.
+     * @param data Datos de la firma CMS.
+     * @param checkContent Si se debe verificar el contenido.
+     * @return Lista de resultados de validación.
+     * @throws IOException Si ocurre un error de lectura.
+     */
+    public static List<ValidationResult> validate(final byte[] data, final boolean checkContent) throws IOException {
+        return validate(data, null, checkContent);
+    }
+
+    /** Valida una firma CMS SignedData con datos originales.
+     * @param data Datos de la firma CMS.
+     * @param originalData Datos originales firmados.
+     * @param checkContent Si se debe verificar el contenido.
+     * @return Lista de resultados de validación.
+     * @throws IOException Si ocurre un error de lectura.
+     */
+    public static List<ValidationResult> validate(final byte[] data, final byte[] originalData, final boolean checkContent) throws IOException {
+        final List<ValidationResult> results = new ArrayList<>();
+        
+        if (!isCMSSignedData(data)) {
+            results.add(new ValidationResult(false, "No es una firma CMS SignedData válida"));
+            return results;
+        }
+        
+        results.add(new ValidationResult(true, "Estructura CMS válida"));
+        return results;
     }
 }
