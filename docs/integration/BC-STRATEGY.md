@@ -12,12 +12,11 @@
 **Pros:**
 - Clean history, single reviewable commit
 - Easy to revert if issues
-- Hides whitespace noise in single diff
 
 **Cons:**
 - Loses commit history/granularity
 - Harder to bisect regressions
-- Large diff (~25K lines) in one PR
+- Large diff in one PR (~25K lines raw / ~2K clean)
 
 **Recommendation:** ❌ Not recommended for this scale
 

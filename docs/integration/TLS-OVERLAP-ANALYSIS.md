@@ -20,11 +20,14 @@
 ---
 
 ### PR #543 / #546 (Upstream)
-**Status:** Need to fetch from upstream repository
+**Status:** Both PRs are OPEN upstream (verified 2026-09-27 via `gh pr view`)
 
-**Likely scope based on issue numbers:**
-- PR #543: TLS/SSL improvements
-- PR #546: Certificate validation enhancements
+**Confirmed scope:**
+- PR #543 ("Usar TLS en lugar de SSL en SSLContext"): replaces the `SSL` context algorithm with
+  `TLS` in `afirma-core/.../misc/http/{DataDownloader,SslSecurityManager}.java`
+- PR #546 ("Advertir en logs cuando se deshabilitan comprobaciones SSL"): adds warning logs when
+  SSL checks are disabled; touches `DataDownloader.java`, `SslSecurityManager.java` and
+  `afirma-crypto-core-pkcs7-tsp/.../CMSTimestamper.java`. No validation-logic changes.
 
 ---
 
@@ -48,8 +51,8 @@
 
 ## Recommended Next Steps
 
-1. **Fetch upstream PRs** when available
-2. **Compare diffs** programmatically
+1. ~~**Fetch upstream PRs**~~ ✅ DONE (2026-09-27: both open, file lists confirmed)
+2. **Deep-compare diffs** against `prefs/strict-ssl` hunk-by-hunk before any rebase
 3. **Coordinate with upstream maintainers** on TLS strategy
 4. **No code changes** until overlap is confirmed
 

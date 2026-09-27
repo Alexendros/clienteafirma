@@ -8,34 +8,42 @@
 
 ## Executive Summary
 
-The BouncyCastle migration branch contains **95 changed files** with **~25,421 lines changed** (12,698 added, 12,723 removed).
+The BouncyCastle migration branch contains **95 changed files** with **2,027 lines changed**
+(1,001 added, 1,026 removed) after Strategy-B cleanup (see BC-STRATEGY.md).
 
-- **Whitespace/formatting noise:** 22.1% (5,607 lines)
-- **Functional changes:** 77.9% (19,814 lines)
-- **Module categories affected:** 16 modules
+- **Whitespace-only files:** 0 (verified: 95/95 files content-identical after stripping whitespace)
+- **Functional changes:** 1,001 added / 1,026 removed
+- **Modules affected:** 17 modules + root POM
+
+> **Historical note:** the raw pre-cleanup diff was 12,698 added / 12,723 removed (~25,421 lines,
+> ~92% whitespace-only churn from CRLF/indent noise). The module breakdown below reflects the
+> **clean** scope and sums exactly to the totals above.
 
 ---
 
 ## Module Breakdown
 
-| Module | Files | Added | Removed | Whitespace | Functional | Type |
-|--------|-------|-------|---------|------------|------------|------|
-| afirma-crypto-cms | 7 | 3,185 | 3,185 | 1,355 | 5,015 | Core crypto |
-| afirma-crypto-cms-enveloper | 17 | 2,048 | 2,048 | 1,084 | 3,012 | Core crypto |
-| afirma-crypto-cades | 8 | 540 | 540 | 155 | 925 | Core crypto |
-| afirma-crypto-cades-multi | 7 | 1,321 | 1,321 | 448 | 2,194 | Core crypto |
-| afirma-crypto-core-pkcs7 | 8 | 227 | 228 | 106 | 349 | Core crypto |
-| afirma-crypto-core-pkcs7-tsp | 2 | 547 | 547 | 231 | 863 | Core crypto |
-| afirma-crypto-pdf | 2 | 778 | 778 | 385 | 1,171 | Core crypto |
-| afirma-crypto-xades | 2 | 459 | 459 | 181 | 737 | Core crypto |
-| afirma-crypto-validation | 3 | 75 | 75 | 21 | 129 | Validation |
-| afirma-crypto-jarverifier | 2 | 414 | 417 | 163 | 668 | JAR verify |
-| afirma-keystores-filters | 4 | 366 | 368 | 137 | 597 | Keystore |
-| afirma-server-triphase-signer-core | 4 | 1,066 | 1,066 | 521 | 1,611 | Triphase |
-| afirma-simple-plugin-validatecerts | 2 | 565 | 565 | 186 | 944 | Validation |
-| afirma-simple | 5 | 1,935 | 1,937 | 528 | 3,344 | Product |
-| afirma-ui-simple-configurator | 2 | 371 | 371 | 114 | 628 | UI |
-| Root POM | 1 | 11 | 11 | 2 | 20 | Config |
+| Module | Files | Added | Removed | Type |
+|--------|-------|-------|---------|------|
+| afirma-core-massive | 1 | 1 | 1 | Batch/massive |
+| afirma-crypto-cades | 12 | 114 | 116 | Core crypto |
+| afirma-crypto-cades-multi | 8 | 94 | 96 | Core crypto |
+| afirma-crypto-cms | 8 | 116 | 119 | Core crypto |
+| afirma-crypto-cms-enveloper | 23 | 246 | 246 | Core crypto |
+| afirma-crypto-core-pkcs7 | 10 | 85 | 87 | Core crypto |
+| afirma-crypto-core-pkcs7-tsp | 3 | 22 | 25 | Core crypto |
+| afirma-crypto-jarverifier | 2 | 10 | 13 | JAR verify |
+| afirma-crypto-pdf | 2 | 2 | 2 | Core crypto |
+| afirma-crypto-validation | 4 | 32 | 34 | Validation |
+| afirma-crypto-xades | 2 | 2 | 2 | Core crypto |
+| afirma-keystores-filters | 4 | 19 | 21 | Keystore |
+| afirma-server-triphase-signer-core | 4 | 62 | 62 | Triphase |
+| afirma-simple | 5 | 79 | 82 | Product |
+| afirma-simple-plugin-validatecerts | 3 | 43 | 46 | Validation |
+| afirma-ui-applet | 1 | 34 | 34 | UI |
+| afirma-ui-simple-configurator | 2 | 30 | 30 | UI |
+| Root POM | 1 | 10 | 10 | Config |
+| **Total** | **95** | **1,001** | **1,026** | |
 
 ---
 
@@ -75,7 +83,7 @@ All crypto modules migrate from **SpongyCastle** to **BouncyCastle jdk18on**:
 </dependency>
 ```
 
-**Affected modules:** afirma-crypto-cades, afirma-crypto-cades-multi, afirma-crypto-cms, afirma-crypto-cms-enveloper, afirma-crypto-core-pkcs7, afirma-crypto-core-pkcs7-tsp, afirma-crypto-validation, afirma-simple-plugin-validatecerts, afirma-simple, afirma-keystores-filters, afirma-server-triphase-signer-core
+**Affected modules:** afirma-crypto-cades, afirma-crypto-cades-multi, afirma-crypto-cms, afirma-crypto-cms-enveloper, afirma-crypto-core-pkcs7, afirma-crypto-core-pkcs7-tsp, afirma-crypto-pdf, afirma-crypto-xades, afirma-crypto-validation, afirma-crypto-jarverifier, afirma-keystores-filters, afirma-server-triphase-signer-core, afirma-simple-plugin-validatecerts, afirma-simple, afirma-ui-simple-configurator, afirma-ui-applet, afirma-core-massive
 
 ---
 
@@ -167,7 +175,7 @@ Only `afirma-core` has JUnit dependency declared.
 
 | Risk | Severity | Mitigation |
 |------|----------|------------|
-| Whitespace noise (22%) | Medium | Strategy B: clean up noise before merge |
+| Whitespace noise (~92% of raw diff) | Medium | ✅ Strategy B applied: clean diff 1 001+/1 026−, 0 whitespace-only files |
 | Missing test dependencies | High | Add JUnit to affected POMs |
 | No test execution in CI | High | Enable test phase in CI |
 | Large functional surface | High | Incremental validation with test vectors |

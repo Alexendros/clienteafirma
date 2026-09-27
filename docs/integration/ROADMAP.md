@@ -45,7 +45,7 @@
 ### Next Steps for Merge
 1. ~~Apply automated whitespace cleanup~~ ✅ DONE (Strategy B: content-level reconstruction, CRLF-safe)
 2. ~~Add JUnit test dependencies to 13 crypto module POMs~~ ✅ DONE
-3. ~~Run full test suite on BC branch~~ ✅ DONE (new + existing suites green, see P1-TEST)
+3. ~~Run validation tests on BC branch~~ ✅ DONE (12 new tests + full suites of cades/cms/xades/validation green; pdf full suite NOT run — 4 pre-existing TestPadesBaseline errors, see P1-TEST)
 4. ~~Execute validation vectors (CAdES, PAdES, XAdES, CMS)~~ ✅ DONE (12 new tests passing)
 5. ~~Verify product JAR build + F2 regression~~ ✅ DONE
 6. ~~Create PR against upstream/master with clean diff~~ ✅ DONE (PR #573 updated with clean branch `crypto/bouncycastle-jdk18on` @ `70b9c29f8`)
@@ -225,7 +225,7 @@ Stage 5: Artifacts (JARs, installers, packages)
 ### P1-BC Merge Gate
 - [x] Clean diff (<5% whitespace noise) — achieved: 1 001+/1 026− vs 12 698+/12 723−; 0 whitespace-only files
 - [x] All 13 modules have test deps
-- [x] All crypto tests pass (100%)
+- [x] New validation tests pass (12/12); full suites green for cades/cms/xades/validation (pdf full suite not executed — 4 pre-existing baseline errors tracked separately)
 - [x] Validation vectors: 100% parity BC vs upstream
 - [x] Product JAR builds and smoke tests
 - [x] No F2 regression failures

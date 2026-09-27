@@ -71,7 +71,9 @@
 
 ---
 
-## Clean Files (Low Noise <10%)
+## Superseded: Clean Files (Low Noise <10%)
+
+> This historical table is superseded by the correction above and is not authoritative.
 
 | File | Changes | Noise | Noise % |
 |------|---------|-------|---------|
