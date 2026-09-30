@@ -82,6 +82,10 @@ public final class SslSecurityManager {
 	 * @param conn Conexi&oacute;n de la que desactivar las comprobaciones SSL.
 	 * @throws GeneralSecurityException Si hay problemas al desactivar el uso de almacen de claves. */
 	public static void disableSslChecks(final HttpsURLConnection conn) throws GeneralSecurityException {
+		if (Boolean.parseBoolean(System.getProperty(UrlHttpManagerImpl.JAVA_PARAM_STRICT_SSL_CHECKS, Boolean.FALSE.toString()))) {
+			LOGGER.info("strictSslChecks activo: no se deshabilitan comprobaciones SSL en la conexion"); //$NON-NLS-1$
+			return;
+		}
 
 		final SSLContext sc = SSLContext.getInstance(SSL_CONTEXT);
 		sc.init(null, DUMMY_TRUST_MANAGER, secureRandom);
@@ -94,6 +98,10 @@ public final class SslSecurityManager {
 	 * cualquier certificado.
 	 * @throws GeneralSecurityException Si hay problemas al desactivar el uso de almacen de claves. */
 	public static void disableSslChecks() throws GeneralSecurityException {
+		if (Boolean.parseBoolean(System.getProperty(UrlHttpManagerImpl.JAVA_PARAM_STRICT_SSL_CHECKS, Boolean.FALSE.toString()))) {
+			LOGGER.info("strictSslChecks activo: no se deshabilitan comprobaciones SSL globales"); //$NON-NLS-1$
+			return;
+		}
 		setTrustManagerAndKeyManager(
 			DUMMY_TRUST_MANAGER,
 			DUMMY_HOSTNAME_VERIFIER,
