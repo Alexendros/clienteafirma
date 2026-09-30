@@ -1,6 +1,6 @@
 # Autofirma comunitaria — estado de fases
 
-**Canónico (destino):** [Soluciones-Alexendros/clienteafirma-alexendros](https://github.com/Soluciones-Alexendros/clienteafirma-alexendros) (monorepo: código Autofirma 1.9.x + programa Autofirma-2026).  
+**Canónico (hoy):** [Alexendros/clienteafirma](https://github.com/Alexendros/clienteafirma) · **Destino:** [Soluciones-Alexendros/clienteafirma-alexendros](https://github.com/Soluciones-Alexendros/clienteafirma-alexendros) (traslado pendiente).  
 **MVP operativo:** [docs/MVP.md](MVP.md) — `bash scripts/mvp.sh`  
 **Tareas vivas:** [TASKS.md](TASKS.md) · **Hoja de ruta:** [integration/ROADMAP.md](integration/ROADMAP.md) · **Comparativa CTT:** [COMPARATIVA-FORK-CTT.md](COMPARATIVA-FORK-CTT.md)  
 **BouncyCastle en el fork:** integrado en `master` (PR #3); rama histórica `crypto/bouncycastle-jdk18on` ya no es el tip canónico. Ver [W2-BOUNCYCASTLE-PREFLIGHT.md](W2-BOUNCYCASTLE-PREFLIGHT.md).  

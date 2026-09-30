@@ -11,8 +11,8 @@
 
 ## Learned Workspace Facts
 
-- Clone local preferido: `/home/alexendros/Aplicaciones/Fuentes/clienteafirma-alexendros` (no usar `Fuentes/clienteafirma` legacy ni anidar bajo el meta archivado).
-- Repo canónico comunitario (destino): `https://github.com/Soluciones-Alexendros/clienteafirma-alexendros` (monorepo: árbol Java Autofirma 1.9.x + programa Autofirma-2026). Rama por defecto `master`. Traslado desde `Alexendros/clienteafirma`.
+- Repo canónico comunitario (hoy): `https://github.com/Alexendros/clienteafirma` (monorepo). Destino de org: `https://github.com/Soluciones-Alexendros/clienteafirma-alexendros`. Rama por defecto `master`.
+- Clone local preferido del mantenedor: directorio hermano `clienteafirma-alexendros` bajo `Aplicaciones/Fuentes/` (no usar el clone legacy `clienteafirma` ni anidar bajo el meta archivado).
 - El meta histórico `Alexendros/Autofirma-2026` se archiva tras la migración; no es el working tree.
 - Cliente construible/auditable/sustituible respecto a Autofirma 1.9.x (mismos formatos y protocolo `afirma://`); no sustituye `@firma`, VALIDe, TS@, Port@firmas ni Cl@ve.
 - Comparativa fork↔CTT: `docs/COMPARATIVA-FORK-CTT.md`; tareas: `docs/TASKS.md`; hoja de ruta: `docs/integration/ROADMAP.md`.

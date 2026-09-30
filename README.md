@@ -6,7 +6,7 @@
 - **Estructura:** Quiénes somos → comparativa → arranque rápido → construcción Maven → módulos.
 - **Contenido a integrar según contexto:** Conserva Java 8 + Maven y licencias GPL-2.0+ / EUPL-1.1 del CTT. No copies un README de SaaS.
 
-> **Canónico comunitario (destino):** [Soluciones-Alexendros/clienteafirma-alexendros](https://github.com/Soluciones-Alexendros/clienteafirma-alexendros) — fork de [ctt-gob-es/clienteafirma](https://github.com/ctt-gob-es/clienteafirma) (Autofirma **1.9.1**) más el programa Autofirma-2026. **No sustituye** al cliente oficial del Estado ni a VALIDe, Cl@ve o la plataforma `@firma`.
+> **Canónico comunitario (hoy):** [Alexendros/clienteafirma](https://github.com/Alexendros/clienteafirma) — fork de [ctt-gob-es/clienteafirma](https://github.com/ctt-gob-es/clienteafirma) (Autofirma **1.9.1**) más el programa Autofirma-2026. **Destino de org:** `Soluciones-Alexendros/clienteafirma-alexendros` (traslado pendiente). **No sustituye** al cliente oficial del Estado ni a VALIDe, Cl@ve o la plataforma `@firma`.
 
 [![License: GPL-2.0+ OR EUPL-1.1](https://img.shields.io/badge/license-GPL--2.0%2B%20%7C%20EUPL--1.1-blue.svg)](LICENSE)
 [![Baseline](https://img.shields.io/badge/baseline-Autofirma%201.9.1-informational.svg)](docs/BASELINE.txt)
