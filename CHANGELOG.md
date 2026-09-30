@@ -12,10 +12,16 @@ Formato inspirado en [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 
 ### Added
 
+- **Monorepo Autofirma-2026:** capa comunitaria (docs F0–F10, vectores, packaging, harness, Archify, gates 360º) absorbida desde `Alexendros/Autofirma-2026` @ `10996b6`. Este repo es el canónico.
+- Jobs CI `community` + `build-baseline` in-tree (JAR + F2). `build-fork-bc` limitado a ramas `crypto/**`.
+- Fachada ampliada: `make quality` / `make test-community` / `make validate` / gates `review360*`.
+
+### Added (previo)
+
 - Alineación P0 al contrato de repositorio: README con meta-sección Propósito, `LICENSE` de raíz (puntero SPDX; no pisa `license/`), SECURITY, CONTRIBUTING, CHANGELOG, CODEOWNERS, plantillas de issue/PR, Renovate y CI `quality` / `test` / `build` / `smoke`.
 - Fachada `make lint` / `make test` / `make smoke` / `make build` sobre el núcleo `afirma-core`.
 
 ### Notes
 
-- Este árbol es un fork de CTT (Cliente @firma 1.9.1). No se clona a ciegas el layout P1/P2 de un producto propio (sin AGENTS/ARCHITECTURE/docs canónicos).
-- El job `build` empaqueta `afirma-core` (JAR). Autofirma.jar y los WARs (`-Denv=install`) siguen documentados en el README y se construyen en [Autofirma-2026](https://github.com/Alexendros/Autofirma-2026).
+- Fork de CTT (Cliente @firma 1.9.1) + programa comunitario. Meta histórico: [Autofirma-2026](https://github.com/Alexendros/Autofirma-2026) (archivado tras migración).
+- `make build` empaqueta `afirma-core`; Autofirma.jar vía `-Denv=install` / `scripts/mvp.sh` / workflow `build-baseline`.

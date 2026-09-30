@@ -1,13 +1,13 @@
 ---
 name: Feature
-description: Propuesta de mejora para este fork
+description: Propuesta de mejora para Autofirma-2026
 ---
 
 ### Propósito de este documento
 
-- **Objetivos:** Recoger una propuesta de mejora del cliente o de la gobernanza del fork con impacto de contrato (formatos de firma, almacenes, Maven).
-- **Estructura:** Problema → propuesta → impacto (compatibilidad 1.9.x / upstream).
-- **Contenido a integrar según contexto:** Adapta el formulario a este fork. Si el cambio es genérico, prioriza proponerlo a ctt-gob-es/clienteafirma.
+- **Objetivos:** Recoger una propuesta de mejora de scripts, CI, vectores o documentación con impacto de contrato.
+- **Estructura:** Problema → propuesta → impacto (formatos 1.9.x, `afirma://`, baseline).
+- **Contenido a integrar según contexto:** Adapta el formulario a este meta-repo. Si toca formatos de firma o el protocolo, enlaza la fase (F2/F6) y no relajes la puerta de vectores.
 
 ## Problema
 
@@ -15,8 +15,8 @@ description: Propuesta de mejora para este fork
 
 ## Propuesta
 
-<!-- módulo, API de firma, perfil Maven o doc + ejemplo de uso -->
+<!-- script, workflow, vector o doc + ejemplo de uso -->
 
 ## Impacto en contrato
 
-<!-- ¿rompe CAdES/PAdES/XAdES 1.9.x, afirma:// o el dual licence? ¿debe ir a upstream? -->
+<!-- ¿toca CAdES/XAdES/PAdES/FacturaE, afirma://, docs/BASELINE.txt o dual licence? -->

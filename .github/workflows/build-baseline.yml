@@ -1,0 +1,83 @@
+name: build-baseline
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-linux-jdk8:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: "8"
+          cache: maven
+          cache-dependency-path: pom.xml
+
+      - name: Build (install, skip unit tests that need Red SARA)
+        run: mvn -B clean install -DskipTests -Denv=install
+
+      - name: Upload autofirma.jar
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: autofirma-jar
+          path: afirma-simple/target/autofirma.jar
+          if-no-files-found: error
+
+      - name: Upload installed es.gob.afirma Maven artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: m2-afirma
+          path: ~/.m2/repository/es/gob/afirma
+          if-no-files-found: error
+
+  f2-vectors:
+    needs: build-linux-jdk8
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: "8"
+          cache: maven
+          cache-dependency-path: |
+            pom.xml
+            tests/validation-harness/pom.xml
+
+      - name: Restore es.gob.afirma artifacts
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: m2-afirma
+          path: ~/.m2/repository/es/gob/afirma
+
+      - name: Download autofirma.jar
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: autofirma-jar
+          path: afirma-simple/target
+
+      - name: F2 regression gate
+        run: bash scripts/f2-regression.sh
+
+      - name: F2 validation harness (integrity + negatives)
+        working-directory: tests/validation-harness
+        env:
+          VECTORS_DIR: ${{ github.workspace }}/vectors
+        run: mvn -B test -Dvectors.dir="${VECTORS_DIR}"
