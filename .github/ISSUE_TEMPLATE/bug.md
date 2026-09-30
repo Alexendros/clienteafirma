@@ -1,18 +1,18 @@
 ---
 name: Bug
-description: Comportamiento incorrecto en este fork de Cliente @firma
+description: Comportamiento incorrecto del meta-repo Autofirma-2026
 ---
 
 ### Propósito de este documento
 
-- **Objetivos:** Recoger un fallo reproducible (módulo Maven, firma o almacén) sin filtrar claves ni datos de ciudadanía.
+- **Objetivos:** Recoger un fallo reproducible (scripts, CI, vectores o harness) sin filtrar secretos.
 - **Estructura:** Comando y salida → esperado vs obtenido → reproducción → entorno.
-- **Contenido a integrar según contexto:** Adapta el formulario a este fork. Adjunta logs mínimos sintéticos; no pegues PINs, keystores reales ni certificados de producción.
+- **Contenido a integrar según contexto:** Adapta el formulario a este meta-repo. Adjunta logs mínimos sintéticos; no pegues claves, P12 de producción, tokens ni certificados reales.
 
 ## Comando y salida
 
 ```bash
-# comando Maven o de Autofirma + salida relevante (sin secretos)
+# comando ejecutado + salida relevante (sin secretos)
 ```
 
 ## Esperado vs obtenido
@@ -21,8 +21,8 @@ description: Comportamiento incorrecto en este fork de Cliente @firma
 
 ## Reproducción
 
-<!-- módulo, perfil Maven, documento sintético, algoritmo (CAdES/PAdES/XAdES) -->
+<!-- script, workflow, vector o fase F0–F10 -->
 
 ## Entorno
 
-<!-- java -version, mvn -version, OS, commit/branch -->
+<!-- OS, JDK, commit/branch, docs/BASELINE.txt -->

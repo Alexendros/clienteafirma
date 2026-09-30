@@ -2,17 +2,36 @@
 
 ### Propósito de este documento
 
-- **Objetivos:** Presentar Autofirma / Cliente @firma y cómo construir los módulos Maven sin reescribir el árbol upstream.
-- **Estructura:** Producto → construcción (perfiles Maven) → módulos vigentes y obsoletos.
-- **Contenido a integrar según contexto:** Conserva el stack Java 8 + Maven y las licencias GPL-2.0+ / EUPL-1.1 de CTT. No copies un README de SaaS. El rescate comunitario, vectores F2 y empaquetado viven en [Autofirma-2026](https://github.com/Alexendros/Autofirma-2026).
+- **Objetivos:** Presentar el monorepo comunitario (código Autofirma 1.9.x + programa Autofirma-2026) y cómo construir, verificar y empaquetar el cliente.
+- **Estructura:** Programa comunitario → construcción Maven → módulos vigentes y obsoletos.
+- **Contenido a integrar según contexto:** Conserva el stack Java 8 + Maven y las licencias GPL-2.0+ / EUPL-1.1 de CTT. No copies un README de SaaS. Vectores F2, packaging y gates viven en este mismo repo.
 
-> **Este repositorio** es un fork personal de [ctt-gob-es/clienteafirma](https://github.com/ctt-gob-es/clienteafirma) (línea de producto **1.9.1**). No sustituye al cliente oficial.
+> **Este repositorio** es el **canónico comunitario**: fork de [ctt-gob-es/clienteafirma](https://github.com/ctt-gob-es/clienteafirma) (línea **1.9.1**) más la capa Autofirma-2026. No sustituye al cliente oficial del Estado.
+
+[![License: GPL-2.0+ OR EUPL-1.1](https://img.shields.io/badge/license-GPL--2.0%2B%20%7C%20EUPL--1.1-blue.svg)](LICENSE)
+[![Baseline](https://img.shields.io/badge/baseline-Autofirma%201.9.1-informational.svg)](docs/BASELINE.txt)
+[![Upstream](https://img.shields.io/badge/upstream-ctt--gob--es%2Fclienteafirma-success.svg)](https://github.com/ctt-gob-es/clienteafirma)
+
+**Programa:** [docs/ESTADO-FASES.md](docs/ESTADO-FASES.md) · **MVP:** `bash scripts/mvp.sh` ([docs/MVP.md](docs/MVP.md)) · Meta histórico archivado: [Autofirma-2026](https://github.com/Alexendros/Autofirma-2026)
 
 Autofirma es uno de los productos de la **Suite @firma** de soluciones de identificación y firma electrónica. Se proporciona a las Administraciones Públicas para que dispongan de los instrumentos necesarios para implementar la autenticación y firma electrónica avanzada de una forma rápida y efectiva.
 
 Autofirma es una herramienta de firma electrónica en entornos de escritorio y dispositivos móviles, que funciona en forma de Applet de Java integrado en una página Web mediante JavaScript, como aplicación de escritorio, o como aplicación móvil, dependiendo del entorno del usuario.
 
 Es **software libre** con licencia **GPL 2+** y **EUPL 1.1**. Puede consultar más información y el código del producto en la forja del [Centro de Transferencia de Tecnología (CTT)](https://github.com/ctt-gob-es/).
+
+---
+
+## Arranque comunitario (Autofirma-2026)
+
+```bash
+# JDK 8 + Maven en PATH (o bajo ./tools/)
+bash scripts/mvp.sh                 # build in-tree + F2 + packaging best-effort
+bash scripts/mvp.sh --skip-build    # si ya tienes afirma-simple/target/autofirma.jar
+make validate                       # contrato + quality + tests + smoke
+```
+
+Comparativa con Autofirma oficial y alcance: ver el manifiesto [`propuesta-autofirma-2026.md`](propuesta-autofirma-2026.md) y [docs/CIUDADANO.md](docs/CIUDADANO.md).
 
 ---
 
@@ -131,9 +150,11 @@ La lista de módulos obsoletos y/o sin soporte que se conservan en el repositori
 
 ---
 
-## Gobernanza de este fork
+## Gobernanza y fachada comunitaria
 
-- [CONTRIBUTING.md](CONTRIBUTING.md) · [SECURITY.md](SECURITY.md) · [CHANGELOG.md](CHANGELOG.md) · [LICENSE](LICENSE)
-- Fachada local: `make lint`, `make test`, `make smoke`, `make build` (núcleo `afirma-core`).
-- CI: jobs `quality` / `test` / `build` / `smoke`. El empaquetado completo (`-Denv=install`) se documenta arriba y se ejecuta en [Autofirma-2026](https://github.com/Alexendros/Autofirma-2026).
+- [CONTRIBUTING.md](CONTRIBUTING.md) · [SECURITY.md](SECURITY.md) · [CHANGELOG.md](CHANGELOG.md) · [LICENSE](LICENSE) · [AGENTS.md](AGENTS.md)
+- Fachada local: `make lint` / `make quality` / `make test` / `make test-community` / `make smoke` / `make build` / `make validate`
+- Gates 360º: `make review360` / `make review360-r2` / `make remediation360`
+- CI: `quality` / `test` / `community` / `build` / `smoke` + `build-baseline` (JAR + vectores F2)
+- Empaquetado completo: `mvn -Denv=install` o `bash scripts/mvp.sh`
 

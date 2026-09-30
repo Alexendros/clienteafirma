@@ -75,3 +75,21 @@ hs_err_pid*
 
 # macOS
 .DS_Store
+
+# Community layer (Autofirma-2026) — toolchains y salidas locales
+tools/
+integra/
+fire/
+dist/
+packaging/stage-deb/
+packaging/stage-rpm/
+packaging/*.deb
+vectors/out/
+vectors/manifest/latest.txt
+tests/**/target/
+docs/*.log
+.cursor/
+.idea/
+*.iml
+*.pyc
+node_modules/

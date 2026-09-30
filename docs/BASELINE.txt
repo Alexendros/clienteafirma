@@ -1,0 +1,7 @@
+BASELINE_COMMIT=0d7f3cf01fb65d2be5b245622d2c8f490f36e718
+PRODUCT_VERSION=1.9.1
+JDK_TARGET=1.8
+UPSTREAM=https://github.com/ctt-gob-es/clienteafirma
+DATE=2026-09-23T11:23:37Z
+NOTE=Working tree canónico: Alexendros/clienteafirma (monorepo). BASELINE_COMMIT pinea sync con upstream CTT 1.9.1.
+CANONICAL_REPO=https://github.com/Alexendros/clienteafirma

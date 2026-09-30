@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+# Pre-commit: meta-repo shell quality (bash -n + shellcheck if available).
+# Product Java trees (clienteafirma/) are gitignored — not covered here.
+set -e
+make quality
