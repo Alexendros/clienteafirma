@@ -175,3 +175,8 @@ Evidencia: `dist/REMEDIATION-360-EVIDENCE.txt`; e2e local `dist/E2E-F2-PKG.log` 
 | Sequence | [protocolo-mitigado.html](../.archify/20260930-2331-remediation-360-e2e/sequence/protocolo-mitigado.html) |
 | Dataflow | [xml-seguro.html](../.archify/20260930-2331-remediation-360-e2e/dataflow/xml-seguro.html) |
 | Lifecycle | [deuda-cerrada.html](../.archify/20260930-2331-remediation-360-e2e/lifecycle/deuda-cerrada.html) |
+
+
+## Archify (monorepo)
+
+Suite post-migración: [`.archify/20261001-0010-monorepo-canonical/SUITE-SUMMARY.json`](../.archify/20261001-0010-monorepo-canonical/SUITE-SUMMARY.json).
