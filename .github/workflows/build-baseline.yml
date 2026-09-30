@@ -26,8 +26,11 @@ jobs:
           cache: maven
           cache-dependency-path: pom.xml
 
-      - name: Build (install, skip unit tests that need Red SARA)
-        run: mvn -B clean install -DskipTests -Denv=install
+      # Full reactor first (BC modules), then product profile for JAR/WARs.
+      - name: Build (full install + env=install)
+        run: |
+          mvn -B clean install -Dmaven.test.skip=true
+          mvn -B install -Dmaven.test.skip=true -Denv=install
 
       - name: Upload autofirma.jar
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
