@@ -18,7 +18,8 @@ import pytest
 from pathlib import Path
 
 # Get the repository root from the current file location
-REPO_ROOT = Path(__file__).parent.parent.parent.parent.parent
+# tests/accessibility/src/test/python/orca_test_suite.py -> repo root needs 6 parents
+REPO_ROOT = Path(__file__).parent.parent.parent.parent.parent.parent
 
 # Check for required dependencies
 try:
