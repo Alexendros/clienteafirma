@@ -46,10 +46,11 @@ jobs:
         run: |
           bash scripts/f2-regression.sh
 
-      - name: Install appimagetool
+      - name: Install appimagetool and FUSE
         run: |
           wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
           chmod +x /usr/local/bin/appimagetool
+          sudo apt-get update && sudo apt-get install -y libfuse2
       
       - name: Package Linux artifacts (DEB, RPM, AppImage)
         run: |
