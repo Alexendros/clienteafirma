@@ -4,7 +4,7 @@
 COMMUNITY_SCRIPTS := $(wildcard scripts/*.sh)
 
 .PHONY: help lint quality test test-community smoke build validate \
-	review360 review360-r2 remediation360 security-material
+	review360 review360-r2 remediation360 security-material test-crypto test-accessibility
 
 help:
 	@printf '%s\n' \
@@ -37,6 +37,13 @@ test:
 test-crypto:
 	cd tests/validation-harness && mvn -B test
 
+test-accessibility:
+	@if command -v pytest >/dev/null 2>&1 && command -v python3 >/dev/null 2>&1; then \
+		cd tests/accessibility && python3 -m pytest src/test/python/orca_test_suite.py::TestAccessibilityCodeVerification -v; \
+	else \
+		echo "pytest/python3 not available; skipping accessibility code verification (run in CI)"; \
+	fi
+
 test-community:
 	bash scripts/ci-community-test.sh
 
@@ -49,7 +56,7 @@ build:
 
 validate: lint quality test test-community smoke
 
-validate-full: validate test-crypto
+validate-full: validate test-crypto test-accessibility
 
 review360:
 	bash scripts/verify-code-review-360.sh
