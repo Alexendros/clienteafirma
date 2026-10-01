@@ -17,6 +17,9 @@ import subprocess
 import pytest
 from pathlib import Path
 
+# Get the repository root from the current file location
+REPO_ROOT = Path(__file__).parent.parent.parent.parent.parent
+
 # Check for required dependencies
 try:
     import dogtail.tree
@@ -217,9 +220,9 @@ class TestAutofirmaAccessibility:
 class TestAccessibilityCodeVerification:
     """Verify accessibility code is present without running GUI"""
     
-    def test_certificate_selection_accessible_names(self):
+def test_certificate_selection_accessible_names(self):
         """Verify CertificateSelectionPanel has accessible names"""
-        cert_panel = Path("/home/alexendros/Aplicaciones/Fuentes/clienteafirma-alexendros/afirma-ui-core-jse-keystores/src/main/java/es/gob/afirma/ui/core/jse/certificateselection/CertificateSelectionPanel.java")
+        cert_panel = REPO_ROOT / "afirma-ui-core-jse-keystores/src/main/java/es/gob/afirma/ui/core/jse/certificateselection/CertificateSelectionPanel.java"
         content = cert_panel.read_text()
         
         # Check for accessible names on cert list
@@ -234,7 +237,7 @@ class TestAccessibilityCodeVerification:
     
     def test_pin_field_accessible_name(self):
         """Verify PIN field has accessible name in JSEUIManager"""
-        jseuim_path = Path("/home/alexendros/Aplicaciones/Fuentes/clienteafirma-alexendros/afirma-ui-core-jse/src/main/java/es/gob/afirma/ui/core/jse/JSEUIManager.java")
+        jseuim_path = REPO_ROOT / "afirma-ui-core-jse/src/main/java/es/gob/afirma/ui/core/jse/JSEUIManager.java"
         content = jseuim_path.read_text()
         
         # Check pwd field has accessible name set to label text
@@ -243,7 +246,7 @@ class TestAccessibilityCodeVerification:
     
     def test_confirm_dialog_accessible_names(self):
         """Verify ConfirmSignatureDialog has accessible names"""
-        confirm_path = Path("/home/alexendros/Aplicaciones/Fuentes/clienteafirma-alexendros/afirma-simple/src/main/java/es/gob/afirma/standalone/ui/ConfirmSignatureDialog.java")
+        confirm_path = REPO_ROOT / "afirma-simple/src/main/java/es/gob/afirma/standalone/ui/ConfirmSignatureDialog.java"
         content = confirm_path.read_text()
         
         # Check dialog has accessible name and description
