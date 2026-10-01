@@ -11,15 +11,17 @@
 
 ## Learned Workspace Facts
 
-- Repo canónico comunitario: `https://github.com/Alexendros/clienteafirma` (monorepo: árbol Java Autofirma 1.9.x + programa Autofirma-2026). Rama por defecto `master`.
-- El meta histórico `Alexendros/Autofirma-2026` queda archivado tras la migración; no es el working tree.
+- Repo canónico comunitario (hoy): `https://github.com/Alexendros/clienteafirma` (monorepo). Destino de org: `https://github.com/Soluciones-Alexendros/clienteafirma-alexendros`. Rama por defecto `master`.
+- Clone local preferido del mantenedor: directorio hermano `clienteafirma-alexendros` bajo `Aplicaciones/Fuentes/` (no usar el clone legacy `clienteafirma` ni anidar bajo el meta archivado).
+- El meta histórico `Alexendros/Autofirma-2026` se archiva tras la migración; no es el working tree.
 - Cliente construible/auditable/sustituible respecto a Autofirma 1.9.x (mismos formatos y protocolo `afirma://`); no sustituye `@firma`, VALIDe, TS@, Port@firmas ni Cl@ve.
+- Comparativa fork↔CTT: `docs/COMPARATIVA-FORK-CTT.md`; tareas: `docs/TASKS.md`; hoja de ruta: `docs/integration/ROADMAP.md`.
 - Clones locales opcionales `integra/`, `fire/`, toolchains en `tools/` y `dist/` están en `.gitignore`.
 - Pin de sync upstream: `docs/BASELINE.txt` (`UPSTREAM=ctt-gob-es/clienteafirma`, `BASELINE_COMMIT`).
 - Fachada P0: `make lint` / `make quality` / `make test` / `make test-community` / `make smoke` / `make validate`. Jobs CI: `quality`, `test`, `community`, `build`, `smoke` + `build-baseline` (JAR+F2).
 - MVP operativo: `docs/MVP.md` y `bash scripts/mvp.sh` (evidencia en `dist/MVP-EVIDENCE.txt`).
 - Programa por fases F0–F10; estado en `docs/ESTADO-FASES.md`; manifiesto en `propuesta-autofirma-2026.md`.
-- SpongyCastle→BouncyCastle: F2 verde; rama `crypto/bouncycastle-jdk18on` (CI `build-fork-bc`); PR upstream `ctt-gob-es/clienteafirma#573` cerrada sin merge; seguimiento en `#572`. No endurecer TLS/`disableSslChecks` por defecto sin preferencia explícita.
+- SpongyCastle→BouncyCastle: F2 verde en `master` del monorepo; rama histórica `crypto/bouncycastle-jdk18on`; PR upstream `ctt-gob-es/clienteafirma#573` cerrada sin merge; seguimiento en `#572`. No endurecer TLS/`disableSslChecks` por defecto sin preferencia explícita.
 - Licencia conservada GPL-2.0+ / EUPL-1.1.
 - Archify: skill en `~/.cursor/skills/archify`; artefactos bajo `.archify/` (suite canónica 5 tipos) con texto visible en español sencillo.
 - Revisión/remediación 360º: `docs/CODE-REVIEW-360.md` (+ R2), `docs/REMEDIATION-360.md`, gates `make review360` / `make review360-r2` / `make remediation360`; batería en `docs/VALIDATION-TESTS.md`.

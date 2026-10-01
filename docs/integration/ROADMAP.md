@@ -1,272 +1,110 @@
-# Integration Roadmap: AutoFirma 2026
+# Hoja de ruta de integración — Autofirma comunitaria
 
-**Date:** 2026-09-26
-**Version:** 1.0
+### Propósito de este documento
 
----
+- **Objetivos:** Prioridades del programa (P0–P3) con estado actual y enlaces a informes técnicos.
+- **Estructura:** Matriz de prioridades → detalle P1–P3 → riesgos → criterios de éxito.
+- **Contenido a integrar según contexto:** Español claro; tecnicismos entre paréntesis. El tablero operativo diario está en [TASKS.md](../TASKS.md).
 
-## Priority Matrix
-
-| Priority | Item | Status | Target | Owner |
-|----------|------|--------|--------|-------|
-| P0 | Repository alignment | ✅ DONE | 2026-09-26 | - |
-| P1-BC | BouncyCastle migration (PR #573 clean) | ✅ DONE | 2026-09-26 | - |
-| P1-TEST | Validation harness porting | ✅ DONE | 2026-09-26 | - |
-| P1-TLS | TLS overlap analysis | ✅ DONE | 2026-09-26 | - |
-| P2-A11Y | Accessibility improvements | PENDING | TBD | - |
-| P2-CI | CI/CD pipeline redesign | PENDING | TBD | - |
-| P3-LINUX | Flatpak/AppImage packaging | EXPERIMENTAL | P4 | - |
-| P3-TRIPHASE | Triphase signer | EXPERIMENTAL | P4 | - |
+**Fecha de refresco:** 2026-10-01 · **Versión:** 1.1  
+**Canónico:** monorepo comunitario (destino [Soluciones-Alexendros/clienteafirma-alexendros](https://github.com/Soluciones-Alexendros/clienteafirma-alexendros)).
 
 ---
 
-## P1-BC: BouncyCastle Migration (Complete Analysis)
+## Matriz de prioridades
 
-### Deliverables Created
-- ✅ `BC-DIFF-ANALYSIS.md` - Full diff analysis (95 files, 25K lines)
-- ✅ `BC-NOISE-REPORT.md` - Whitespace noise report (see correction note below)
-- ✅ `BC-STRATEGY.md` - Merge strategy recommendation (Strategy B: Clean + Rebase) — **APPLIED**
-
-### Key Findings
-- **95 files changed**, ~25K lines before cleanup
-- **13 crypto modules** affected
-- **Dependency migration:** SpongyCastle → BouncyCastle jdk18on
-- **Build verified:** Full build passes with `-Dmaven.test.skip=true`
-- **Test gap:** JUnit missing from 13 module POMs (fixed — see P1-TEST)
-- **Strategy B applied (2026-09-26):** migration commit reconstructed via content-level
-  normalization. Diff vs upstream `master` reduced from **12 698+/12 723−** to **1 001+/1 026−**.
-  Per-file content equivalence verified (95/95 files identical after stripping whitespace).
-
-> **Correction — noise metric:** `BC-NOISE-REPORT.md` reported 22.1% whitespace noise. That metric
-> undercounted: the reconstruction showed the true whitespace-only churn was **~92%** of the raw
-> diff. The report's methodology (whitespace-filtered diff) was unreliable for these CRLF blobs;
-> the authoritative figure is the reconstruction result above.
-
-### Next Steps for Merge
-1. ~~Apply automated whitespace cleanup~~ ✅ DONE (Strategy B: content-level reconstruction, CRLF-safe)
-2. ~~Add JUnit test dependencies to 13 crypto module POMs~~ ✅ DONE
-3. ~~Run validation tests on BC branch~~ ✅ DONE (12 new tests + full suites of cades/cms/xades/validation green; pdf full suite NOT run — 4 pre-existing TestPadesBaseline errors, see P1-TEST)
-4. ~~Execute validation vectors (CAdES, PAdES, XAdES, CMS)~~ ✅ DONE (12 new tests passing)
-5. ~~Verify product JAR build + F2 regression~~ ✅ DONE
-6. ~~Create PR against upstream/master with clean diff~~ ✅ DONE (PR #573 updated with clean branch `crypto/bouncycastle-jdk18on` @ `70b9c29f8`)
-
-### Timeline
-- **Cleanup + test deps:** 1 day
-- **Test execution:** 1 day
-- **Validation vectors:** 1 day
-- **PR review/merge:** 2-5 days
-- **Total:** 5-8 days
+| Prioridad | Ítem | Estado | Notas |
+|-----------|------|--------|-------|
+| P0 | Alineación del repositorio (contrato, CI mínima) | Hecho | PR #1 |
+| P1-BC | Migración SpongyCastle → BouncyCastle 1.78.1 | Hecho en el fork | En `master` del monorepo (PR #3). PR CTT [#573](https://github.com/ctt-gob-es/clienteafirma/pull/573) cerrada sin merge; seguimiento [#572](https://github.com/ctt-gob-es/clienteafirma/issues/572) |
+| P1-TEST | Batería de validación (harness) en módulos cripto | Hecho | 12 tests nuevos; ver [TEST-PORTING-MAP.md](TEST-PORTING-MAP.md) |
+| P1-TLS | Análisis de solape TLS con upstream | Hecho (análisis) | Preferencia opt-in; default sin endurecer. Código en integración (`prefs/strict-ssl`) |
+| P2-A11Y | Accesibilidad de flujos de firma | En integración | Rama `a11y/signing-flows`; sesión Orca pendiente |
+| P2-CI | Ampliar ejecución de tests en CI | Pendiente | Hoy `build-baseline` prioriza build + F2; parte del reactor usa skipTests |
+| P3-LINUX | Flatpak / AppImage | Experimental | No bloquea el núcleo |
+| P3-TRIPHASE | Servidor trifásico (firma en tres pasos con servidor) | Experimental | Informe F8; no mezclar con Jakarta en esta línea |
 
 ---
 
-## P1-TEST: Validation Harness Porting (Complete)
+## P1-BC — BouncyCastle (hecho en el fork)
 
-### Deliverables Created
-- ✅ `TEST-PORTING-MAP.md` - Complete porting plan + **final execution results**
+**Qué es:** SpongyCastle era una copia antigua de la biblioteca criptográfica BouncyCastle. El fork usa BouncyCastle 1.78.1 moderno (`jdk18on`) para firmar con los mismos formatos.
 
-### Work Completed (in BC worktree `../clienteafirma-bc`)
-- ✅ Added JUnit to 13 crypto module POMs
-- ✅ Copied test vectors from crypto-validation to 4 target modules
-- ✅ Made validation entry points public/self-contained to break the Maven reactor cycle
-  (`ValidateCMSSignedData` public + static `validate()`; `CAdESValidator` static `validate()`)
-- ✅ Created **4** new validation test classes (12 tests total):
-  - `TestCAdESValidation.java` (4 tests)
-  - `TestCMSValidation.java` (4 tests)
-  - `TestPAdESValidation.java` (3 tests, uses public `AOPDFSigner.isSign()`)
-  - `TestXAdESValidation.java` (1 test)
-- ✅ All new tests compile and pass
+**Entregables:** [BC-DIFF-ANALYSIS.md](BC-DIFF-ANALYSIS.md), [BC-NOISE-REPORT.md](BC-NOISE-REPORT.md), [BC-STRATEGY.md](BC-STRATEGY.md) (estrategia B aplicada: diff limpio).
 
-### Deviation: `TestPAdESModificationDetection` NOT ported
-Dropped from `afirma-crypto-pdf`: its API (`ValidatePdfSignature`/`SignValidity`) lives in
-`afirma-crypto-validation`, which depends on `afirma-crypto-pdf` → porting it downward would create
-a Maven reactor cycle. It already exists as `crypto-validation/.../signvalidation/TestPdfMods.java`
-and is NOT duplicated. See TEST-PORTING-MAP.md for full rationale.
+**Hechos clave:**
 
-### Test Results (clean branch `crypto/bouncycastle-jdk18on` @ `70b9c29f8`, verified 2026-09-26)
-| Module | New tests | Full suite | Fail | Skip |
-|--------|-----------|------------|------|------|
-| afirma-crypto-cades | 4 ✅ | 27 | 0 | 1 |
-| afirma-crypto-cms | 4 ✅ | 6 | 0 | 0 |
-| afirma-crypto-pdf | 3 ✅ | (baseline 4 err) | 0 | 0 |
-| afirma-crypto-xades | 1 ✅ | 68 | 0 | 6 |
-| afirma-crypto-validation | — | 11 | 0 | 0 |
+- ~95 archivos tocados; diff limpio frente a upstream del orden de ~1000 líneas funcionales.
+- 13 módulos cripto afectados.
+- Construcción y vectores F2 (firma de prueba CAdES/XAdES/PAdES/FacturaE/cofirma/contrafirma) en verde en el monorepo.
+- Corrección: el “ruido” de espacios en el diff bruto era ~92 %; la cifra útil es la del diff limpio.
 
-### Pre-existing Failures
-- `TestPadesBaseline`: 4 errors (unrelated to BC migration, tracked separately)
-
-### Vector Coverage Achieved
-- **CAdES:** 4 vectors (implicit, explicit w/wo data, wrong data)
-- **PAdES:** 3 vectors (basic, EPES, expired cert)
-- **XAdES:** 1 vector (EPES detached)
-- **CMS:** 4 vectors (same as CAdES)
+**Upstream:** la PR #573 al CTT no se fusionó. El trabajo vive en este monorepo; la issue #572 sigue el hilo.
 
 ---
 
-## P1-TLS: TLS Overlap Analysis (Complete)
+## P1-TEST — Harness de validación (hecho)
 
-### Deliverables Created
-- ✅ `TLS-OVERLAP-ANALYSIS.md` - Overlap assessment
+Cuatro clases de test nuevas (12 casos) en CAdES, CMS, PAdES y XAdES. No se portó `TestPAdESModificationDetection` hacia abajo para evitar un ciclo Maven (ya existe en `afirma-crypto-validation`).
 
-### Status
-- **Analysis only** - No code changes per user decision
-- **Decision:** Keep `strictSslChecks=false` as default
-- **Coordination:** Track with #567 (A11Y) and upstream PRs #543/#546
+Detalle: [TEST-PORTING-MAP.md](TEST-PORTING-MAP.md).
+
+**Hueco conocido:** la suite completa de PDF tiene 4 errores previos en `TestPadesBaseline` (no introducidos por BC).
 
 ---
 
-## P2-A11Y: Accessibility (Pending)
+## P1-TLS — Solape TLS (análisis hecho; código en integración)
 
-### Requirements
-- Coordinate with upstream PR #567
-- a11y/signing-flows branch (eda3032ee) has initial work
-- Accessible names for cert list, PIN field, confirm dialog
-
-### Next Steps
-1. Review a11y/signing-flows branch
-2. Align with upstream #567
-3. Plan WCAG 2.1 AA compliance
+- Decisión de producto: **no** activar comprobaciones TLS estrictas por defecto (las sedes a veces usan cadenas que fallarían).
+- Preferencia `-DstrictSslChecks=true` solo si el usuario la pide.
+- Análisis: [TLS-OVERLAP-ANALYSIS.md](TLS-OVERLAP-ANALYSIS.md).
 
 ---
 
-## P2-CI: CI/CD Redesign (Pending)
+## P2-A11Y — Accesibilidad (en integración)
 
-### Current State
-- Fork CI only tests afirma-core
-- build-fork-bc.yml uses `-Dmaven.test.skip=true`
-- No test compilation/execution in CI
-
-### Target Architecture
-```
-Stage 1: Validation (compile, lint, checkstyle)
-Stage 2: Compile Tests (all modules)
-Stage 3: Execute Tests (unit + integration)
-Stage 4: Regression (F2, validation vectors)
-Stage 5: Artifacts (JARs, installers, packages)
-```
-
-### Next Steps
-1. Design pipeline stages
-2. Add test dependencies to all modules
-3. Enable test execution in CI
-4. Add validation vector stage
-5. Separate BC and baseline CI
+- Nombres accesibles para lista de certificados, campo PIN y diálogo de confirmar (lectores de pantalla).
+- Coordinar con trabajo upstream cuando exista; sesión real con Orca documentada en F7.
 
 ---
 
-## P3-LINUX: Packaging (Experimental → P4)
+## P2-CI — Pipeline (pendiente)
 
-### Current State
-- Flatpak: Skeleton only (org.autofirma.Autofirma2026.yml)
-- AppImage: Not implemented
-- Triphase: docker-compose.yml skeleton
+Estado actual del monorepo: jobs `quality` / `test` / `community` / `build` / `smoke` + `build-baseline` (JAR + F2).
 
-### Decision
-**DEFERRED TO P4** - Focus on core crypto first
+Objetivo futuro: ejecutar también la batería de validación cripto en CI de forma sistemática (sin alargar en exceso el tiempo de cola).
 
 ---
 
-## P3-TRIPHASE: Triphase Signer (Experimental → P4)
+## P3 — Empaquetado y trifásico (no bloqueantes)
 
-### Current State
-- 4 modules: cache, core, document, server
-- Skeletons in place, not validated in sandbox
-- BC branch has changes to triphase crypto modules
-
-### Decision
-**DEFERRED TO P4** - Focus on core crypto first
+- Linux moderno (Flatpak/AppImage): experimental.
+- Servidor trifásico: compatible a nivel de informe/WAR; validación en sandbox diferida.
 
 ---
 
-## Cross-Cutting Concerns
+## Riesgos
 
-### Test Infrastructure
-- ✅ JUnit added to all crypto modules
-- ✅ Validation vectors ported
-- ⏳ afirma-test-harness module (if needed later)
-
-### Dependency Management
-- ✅ BouncyCastle jdk18on migration mapped
-- ⏳ Version pinning strategy
-- ⏳ Conflict resolution (bcprov vs bcpkix)
-
-### Documentation
-- ✅ Integration docs created
-- ⏳ Migration guide for downstream consumers
-- ⏳ Release notes template
+| Riesgo | Probabilidad | Impacto | Mitigación |
+|--------|--------------|---------|------------|
+| Incompatibilidad API BouncyCastle | Media | Alta | Vectores F2 + tests de validación |
+| Regresión de tests | Baja | Media | `make validate` + F2 |
+| Conflicto al reintegrar en CTT | Alta | Media | Diff limpio; issue #572 |
+| Cambiar TLS por defecto | Baja | Alta | Solo opt-in |
+| Retraso de empaquetado | Alta | Baja | P3; no bloquea núcleo |
 
 ---
 
-## Risk Register
+## Criterios de éxito P1 (cumplidos en el fork)
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|------------|--------|------------|
-| BC API incompatibility | Medium | High | Validation vectors + BC 1.78.1 migration guide |
-| Test regression | Low | Medium | Full test suite + cross-validation |
-| Upstream merge conflicts | High | Medium | Strategy B **applied** (content-level clean reconstruction), small PRs |
-| TLS default change | Low | High | Keep strictSslChecks=false, opt-in only |
-| Packaging delays | High | Low | Deferred to P4, not blocking |
+- [x] Diff limpio BC en el monorepo
+- [x] Dependencias de test en módulos cripto
+- [x] 12/12 tests nuevos en verde
+- [x] JAR de producto + F2 sin regresión de formatos
+- [x] Decisión TLS documentada (default no estricto)
 
 ---
 
-## Milestone Dates (Tentative)
+## Verificación de pipeline (histórico 2026-09-26 + monorepo #5)
 
-| Milestone | Target Date |
-|-----------|-------------|
-| P1-BC PR updated (clean diff) | 2026-09-26 ✅ |
-| P1-BC merged upstream | 2026-10-10 |
-| P2-A11Y started | 2026-10-15 |
-| P2-CI redesign started | 2026-10-20 |
-| P4 Packaging/Triphase kickoff | 2026-Q4 |
-
----
-
-## Success Criteria
-
-### P1-BC Merge Gate
-- [x] Clean diff (<5% whitespace noise) — achieved: 1 001+/1 026− vs 12 698+/12 723−; 0 whitespace-only files
-- [x] All 13 modules have test deps
-- [x] New validation tests pass (12/12); full suites green for cades/cms/xades/validation (pdf full suite not executed — 4 pre-existing baseline errors tracked separately)
-- [x] Validation vectors: 100% parity BC vs upstream
-- [x] Product JAR builds and smoke tests
-- [x] No F2 regression failures
-
-### P1-TEST Complete
-- [x] JUnit in all 13 crypto modules
-- [x] Validation tests in 4 modules (CAdES, CMS, PAdES, XAdES)
-- [x] 12 new validation tests passing
-- [x] Vector coverage: 12 vectors across 4 formats
-- [x] Cyclic-dependency resolution documented
-
-### P1-TLS Complete
-- [x] Overlap analysis documented
-- [x] Decision recorded (strictSslChecks=false default)
-- [x] Coordination path identified
-
----
-
-## Pipeline Verification (2026-09-26)
-
-End-to-end verification of the `build-fork-bc` CI path, reproduced locally against the **clean
-branch** (`crypto/bouncycastle-jdk18on` @ `70b9c29f8`, worktree `../clienteafirma-clean`, JDK 8):
-
-| Step | Command | Result |
-|------|---------|--------|
-| Full build | `mvn -B clean install -Dmaven.test.skip=true` | ✅ BUILD SUCCESS (33 modules) |
-| Product JAR | `mvn -B install -Dmaven.test.skip=true -Denv=install` | ✅ BUILD SUCCESS |
-| Artifact | `afirma-simple/target/autofirma.jar` | ✅ 54,189,655 bytes |
-| New tests (4 modules) | `mvn -B -o test -Dtest=...` | ✅ 12/12 pass |
-| F2 regression | `bash scripts/f2-regression.sh` | ✅ F2 OK (6/6 formats, sizes identical to pre-cleanup) |
-
-**F2 formats verified end-to-end:** CAdES sign, XAdES sign, PAdES sign, FacturaE sign, CAdES
-co-sign, CAdES counter-sign — all produced non-empty, revalidated outputs. Output byte sizes match
-the pre-cleanup BC build exactly (4045 / 7955 / 2253651 / 17212 / 8026 / 8010).
-
-**F2 resources confirmed present on BC branch:** `afirma-simple/src/test/resources/ANF_PF_Activo.pfx`,
-`samples/2.xml`, `facturae_32v1.xml`, `samples/2.pdf`.
-
-**PR:** https://github.com/ctt-gob-es/clienteafirma/pull/573 — branch `crypto/bouncycastle-jdk18on`
-force-pushed to the clean 2-commit history (`a4e95b097` migration + `70b9c29f8` tests); PR
-description updated.
-
-**Known CI gap:** the workflow runs `-Dmaven.test.skip=true`, so the new validation tests are
-**not executed by CI** (build + F2 only). Enabling test execution is the P2-CI task above.
+En la rama limpia BC y después en el monorepo absorbido: build Maven, JAR `autofirma.jar`, tests nuevos y F2 6/6 formatos en verde. Tras el PR #5, CI del canónico pasó `quality`, `test`, `community`, `build`, `smoke`, `build-linux-jdk8`, `f2-vectors`, `actionlint`.
