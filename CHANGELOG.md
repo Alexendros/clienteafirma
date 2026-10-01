@@ -10,8 +10,13 @@ Formato inspirado en [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 
 ## [Unreleased]
 
+### Security
+
+- Retirados de `HEAD` el PFX de instalador, los `afirma.keystore` de aplicación y las contraseñas literales. La firma de instalador exige `AFIRMA_SIGN_PFX` y `AFIRMA_SIGN_PASS` fuera de Git. Gate: `make security-material`.
+
 ### Added
 
+- Suite Archify `.archify/20261001-sec-material/` (arquitectura, flujo, secuencia F2, material y ciclo de release).
 - **Monorepo Autofirma-2026:** capa comunitaria (docs F0–F10, vectores, packaging, harness, Archify, gates 360º) absorbida desde `Alexendros/Autofirma-2026` @ `10996b6`. Este repo es el canónico.
 - Jobs CI `community` + `build-baseline` in-tree (JAR + F2). `build-fork-bc` limitado a ramas `crypto/**`.
 - Fachada ampliada: `make quality` / `make test-community` / `make validate` / gates `review360*`.
