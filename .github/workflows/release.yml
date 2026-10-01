@@ -46,6 +46,11 @@ jobs:
         run: |
           bash scripts/f2-regression.sh
 
+      - name: Install appimagetool
+        run: |
+          wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
+          chmod +x /usr/local/bin/appimagetool
+      
       - name: Package Linux artifacts (DEB, RPM, AppImage)
         run: |
           bash scripts/f6-package-linux.sh
