@@ -34,7 +34,8 @@ jobs:
         with:
           maven-version: '3.9.9'
 
-      - name: Verify GPG key is available
+      - name: Set up GPG key (optional)
+        if: ${{ secrets.GPG_PRIVATE_KEY != '' }}
         run: |
           echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --import --batch --yes
           gpg --list-secret-keys --keyid-format LONG
@@ -65,6 +66,7 @@ jobs:
           cp packaging/flatpak/*.flatpak release-artifacts/ 2>/dev/null || true
 
       - name: Sign artifacts with GPG
+        if: ${{ secrets.GPG_PRIVATE_KEY != '' }}
         run: |
           cd release-artifacts
           for f in *; do
@@ -77,7 +79,9 @@ jobs:
         run: |
           cd release-artifacts
           sha256sum * > SHA256SUMS
-          gpg --armor --detach-sign --output SHA256SUMS.asc SHA256SUMS
+          if [ "${{ secrets.GPG_PRIVATE_KEY }}" != "" ]; then
+            gpg --armor --detach-sign --output SHA256SUMS.asc SHA256SUMS
+          fi
 
       - name: Create Release Notes
         id: release_notes
@@ -91,15 +95,14 @@ jobs:
           - Paquete RPM (Fedora/RHEL/openSUSE)
           - AppImage (universal Linux)
           - Flatpak (cuando esté disponible)
-          - Firmas GPG (`.asc`) y checksums SHA256 para cada artefacto
+          - Checksums SHA256 para cada artefacto
+          ${{ secrets.GPG_PRIVATE_KEY != '' && '- Firmas GPG (`.asc`) para cada artefacto' || '' }}
 
           ### Verificación
           ```bash
-          # Verificar firma GPG
-          gpg --verify autofirma-${{ github.ref_name }}.jar.asc autofirma-${{ github.ref_name }}.jar
-
           # Verificar checksum
           sha256sum -c SHA256SUMS
+          ${{ secrets.GPG_PRIVATE_KEY != '' && '# Verificar firma GPG\ngpg --verify autofirma-${{ github.ref_name }}.jar.asc autofirma-${{ github.ref_name }}.jar' || '' }}
           ```
 
           ### Cambios
@@ -117,9 +120,9 @@ jobs:
           body_path: release-notes.md
           files: |
             release-artifacts/*
-            release-artifacts/*.asc
+            ${{ secrets.GPG_PRIVATE_KEY != '' && 'release-artifacts/*.asc' || '' }}
             release-artifacts/SHA256SUMS
-            release-artifacts/SHA256SUMS.asc
+            ${{ secrets.GPG_PRIVATE_KEY != '' && 'release-artifacts/SHA256SUMS.asc' || '' }}
           draft: false
           prerelease: ${{ contains(github.ref_name, '-rc') || contains(github.ref_name, '-beta') || contains(github.ref_name, '-alpha') }}
         env:
