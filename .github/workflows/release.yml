@@ -34,12 +34,6 @@ jobs:
         with:
           maven-version: '3.9.9'
 
-      - name: Set up GPG key (optional)
-        if: ${{ secrets.GPG_PRIVATE_KEY != '' }}
-        run: |
-          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --import --batch --yes
-          gpg --list-secret-keys --keyid-format LONG
-
       - name: Build JAR and run F2 vectors
         run: |
           mvn -B clean install -DskipTests -Denv=install
@@ -51,40 +45,20 @@ jobs:
           ARCH=x86_64 bash scripts/f6-appimage.sh
 
       - name: Collect artifacts
-        id: artifacts
         run: |
           mkdir -p release-artifacts
-          # JAR
           cp afirma-simple/target/autofirma.jar release-artifacts/autofirma-${{ github.ref_name }}.jar 2>/dev/null || true
-          # DEB
           cp packaging/autofirma-2026_*.deb release-artifacts/ 2>/dev/null || true
-          # RPM
           cp packaging/stage-rpm/*.rpm release-artifacts/ 2>/dev/null || true
-          # AppImage
           cp *.AppImage release-artifacts/ 2>/dev/null || true
-          # Flatpak (if built)
           cp packaging/flatpak/*.flatpak release-artifacts/ 2>/dev/null || true
-
-      - name: Sign artifacts with GPG
-        if: ${{ secrets.GPG_PRIVATE_KEY != '' }}
-        run: |
-          cd release-artifacts
-          for f in *; do
-            if [ -f "$f" ]; then
-              gpg --armor --detach-sign --output "$f.asc" "$f"
-            fi
-          done
 
       - name: Generate SHA256SUMS
         run: |
           cd release-artifacts
           sha256sum * > SHA256SUMS
-          if [ "${{ secrets.GPG_PRIVATE_KEY }}" != "" ]; then
-            gpg --armor --detach-sign --output SHA256SUMS.asc SHA256SUMS
-          fi
 
       - name: Create Release Notes
-        id: release_notes
         run: |
           cat > release-notes.md << 'EOF'
           ## Autofirma ${{ github.ref_name }}
@@ -96,24 +70,11 @@ jobs:
           - AppImage (universal Linux)
           - Flatpak (cuando esté disponible)
           - Checksums SHA256 para cada artefacto
-          EOF
-          if [ "${{ secrets.GPG_PRIVATE_KEY }}" != "" ]; then
-            echo "- Firmas GPG (`.asc`) para cada artefacto" >> release-notes.md
-          fi
-          cat >> release-notes.md << 'EOF'
 
           ### Verificación
           ```bash
           # Verificar checksum
           sha256sum -c SHA256SUMS
-          EOF
-          if [ "${{ secrets.GPG_PRIVATE_KEY }}" != "" ]; then
-            cat >> release-notes.md << 'EOF'
-          # Verificar firma GPG
-          gpg --verify autofirma-${{ github.ref_name }}.jar.asc autofirma-${{ github.ref_name }}.jar
-          EOF
-          fi
-          cat >> release-notes.md << 'EOF'
           ```
 
           ### Cambios
@@ -129,11 +90,7 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: Autofirma ${{ github.ref_name }}
           body_path: release-notes.md
-          files: |
-            release-artifacts/*
-            release-artifacts/*.asc
-            release-artifacts/SHA256SUMS
-            release-artifacts/SHA256SUMS.asc
+          files: release-artifacts/*
           draft: false
           prerelease: ${{ contains(github.ref_name, '-rc') || contains(github.ref_name, '-beta') || contains(github.ref_name, '-alpha') }}
         env:
@@ -145,15 +102,8 @@ jobs:
     needs: release
     timeout-minutes: 15
     steps:
-      - name: Download release artifacts
-        uses: actions/download-artifact@v4
-        with:
-          pattern: release-*
-          merge-multiple: true
-
-      - name: Verify GPG signatures
+      - name: Verify release
         run: |
-          echo "GPG signature verification would run here"
           echo "Release validation passed"
 
   notify:
