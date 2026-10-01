@@ -23,6 +23,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up JDK 8
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "8"
+          cache: maven
+          cache-dependency-path: pom.xml
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -34,10 +42,9 @@ jobs:
 
       - name: Run accessibility code verification tests
         run: |
-          cd tests/accessibility
-          python3 -m pytest src/test/python/orca_test_suite.py::TestAccessibilityCodeVerification -v
+          make test-accessibility
 
-  # Experimental: Full Orca GUI tests (currently experimental - runs but doesn't block)
+  # Experimental: Full Orca GUI tests (non-blocking)
   accessibility-orca:
     name: Accessibility (Orca GUI - Experimental)
     runs-on: ubuntu-latest
