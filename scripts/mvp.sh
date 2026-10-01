@@ -79,7 +79,7 @@ pick_mvn() {
   exit 1
 }
 
-echo "==> Autofirma-2026 MVP (monorepo Alexendros/clienteafirma)"
+echo "==> Autofirma-2026 MVP (Soluciones-Alexendros/clienteafirma-alexendros)"
 echo "    upstream sync pin: $REF"
 
 pick_java

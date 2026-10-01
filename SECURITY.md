@@ -18,7 +18,7 @@
 
 **No abras un issue público** si el hallazgo puede comprometer firmas de ciudadanía, claves privadas, PINs de DNIe/PKCS#11 o almacenes de certificados.
 
-1. Preferible: [GitHub Security Advisory](https://github.com/Alexendros/clienteafirma/security/advisories/new) en este repositorio.
+1. Preferible: [GitHub Security Advisory](https://github.com/Soluciones-Alexendros/clienteafirma-alexendros/security/advisories/new) en este repositorio.
 2. Alternativa: correo a [operaciones@alexendros.dev](mailto:operaciones@alexendros.dev).
 3. Si el defecto es del **producto oficial**, avisa también a AEAD (`soporte.afirma@correo.gob.es` según publica CTT) y/o abre un issue upstream **sin** detalles de explotación.
 
@@ -26,6 +26,7 @@ Incluye: commit, módulo Maven, JDK/OS, y un caso **mínimo sintético** (nunca 
 
 ## Superficie relevante
 
+- El árbol actual no contiene el PFX ni los `afirma.keystore` de aplicación. La nota está en `docs/security/SEC-2026-001-material.md`. Firmar instaladores exige `AFIRMA_SIGN_PFX` y `AFIRMA_SIGN_PASS` fuera de Git.
 - Almacenes de claves (CAPI, NSS/Firefox, PKCS#11, DNIe) y diálogos de PIN.
 - Generación y validación CAdES / PAdES / XAdES / FacturaE y servicios trifásicos.
 - Dependencias criptográficas (SpongyCastle/BouncyCastle, iText, xmlsec).

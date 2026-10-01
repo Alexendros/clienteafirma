@@ -1,6 +1,6 @@
 # MVP operativo — Autofirma-2026
 
-**Estado:** monorepo canónico (`Alexendros/clienteafirma`) con CI auditable, vectores F2 y build reproducible de Autofirma **1.9.1**.
+**Estado:** monorepo canónico (`Soluciones-Alexendros/clienteafirma-alexendros`) con CI auditable, vectores F2 y build de Autofirma **1.9.1**.
 
 Este MVP no sustituye la descarga oficial ni la plataforma `@firma`. Ofrece lo que el canal gubernamental de código abierto no entrega de forma operativa: **compilar, verificar y empaquetar** el cliente con evidencia pública.
 

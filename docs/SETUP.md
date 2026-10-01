@@ -12,7 +12,7 @@
 ## Clone
 
 ```bash
-git clone https://github.com/Alexendros/clienteafirma.git
+git clone https://github.com/Soluciones-Alexendros/clienteafirma-alexendros.git
 cd clienteafirma
 ```
 

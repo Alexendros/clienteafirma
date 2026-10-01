@@ -11,7 +11,7 @@
 
 ## Learned Workspace Facts
 
-- Repo canónico comunitario (hoy): `https://github.com/Alexendros/clienteafirma` (monorepo). Destino de org: `https://github.com/Soluciones-Alexendros/clienteafirma-alexendros`. Rama por defecto `master`.
+- Repo canónico comunitario: `https://github.com/Soluciones-Alexendros/clienteafirma-alexendros` (monorepo). El traslado desde `Alexendros/clienteafirma` ya está hecho. Rama por defecto `master`.
 - Clone local preferido del mantenedor: directorio hermano `clienteafirma-alexendros` bajo `Aplicaciones/Fuentes/` (no usar el clone legacy `clienteafirma` ni anidar bajo el meta archivado).
 - El meta histórico `Alexendros/Autofirma-2026` se archiva tras la migración; no es el working tree.
 - Cliente construible/auditable/sustituible respecto a Autofirma 1.9.x (mismos formatos y protocolo `afirma://`); no sustituye `@firma`, VALIDe, TS@, Port@firmas ni Cl@ve.

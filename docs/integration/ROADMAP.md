@@ -6,8 +6,8 @@
 - **Estructura:** Matriz de prioridades → detalle P1–P3 → riesgos → criterios de éxito.
 - **Contenido a integrar según contexto:** Español claro; tecnicismos entre paréntesis. El tablero operativo diario está en [TASKS.md](../TASKS.md).
 
-**Fecha de refresco:** 2026-10-01 · **Versión:** 1.1  
-**Canónico:** monorepo comunitario (destino [Soluciones-Alexendros/clienteafirma-alexendros](https://github.com/Soluciones-Alexendros/clienteafirma-alexendros)).
+**Fecha de refresco:** 2026-10-01 · **Versión:** 2.1  
+**Canónico:** [Soluciones-Alexendros/clienteafirma-alexendros](https://github.com/Soluciones-Alexendros/clienteafirma-alexendros), rama `master`.
 
 ---
 
@@ -19,8 +19,10 @@
 | P1-BC | Migración SpongyCastle → BouncyCastle 1.78.1 | Hecho en el fork | En `master` del monorepo (PR #3). PR CTT [#573](https://github.com/ctt-gob-es/clienteafirma/pull/573) cerrada sin merge; seguimiento [#572](https://github.com/ctt-gob-es/clienteafirma/issues/572) |
 | P1-TEST | Batería de validación (harness) en módulos cripto | Hecho | 12 tests nuevos; ver [TEST-PORTING-MAP.md](TEST-PORTING-MAP.md) |
 | P1-TLS | Análisis de solape TLS con upstream | Hecho (análisis) | Preferencia opt-in; default sin endurecer. Código en integración (`prefs/strict-ssl`) |
-| P2-A11Y | Accesibilidad de flujos de firma | En integración | Rama `a11y/signing-flows`; sesión Orca pendiente |
-| P2-CI | Ampliar ejecución de tests en CI | Pendiente | Hoy `build-baseline` prioriza build + F2; parte del reactor usa skipTests |
+| P0-SEC | Retirar PFX y contraseña de firma del índice | Hecho en esta rama | `make security-material`. Aviso de revocación redactado y no enviado |
+| P2-A11Y | Nombres accesibles de certificado, PIN y confirmar | Hecho en `master` | Commit `8420011`. Sesión Orca pendiente |
+| P2-CI | Reactor completo y tests de seguridad en CI | Pendiente | Hoy `master` exige `quality`, `test`, `build`, `smoke`. El reactor `-Psonar` no es check |
+| P2-RELEASE | Tag `v1.9.1-community.N`, SBOM y atestación | Bloqueado | No se publica hasta cerrar PAdES, XML fail-closed y Actions por SHA |
 | P3-LINUX | Flatpak / AppImage | Experimental | No bloquea el núcleo |
 | P3-TRIPHASE | Servidor trifásico (firma en tres pasos con servidor) | Experimental | Informe F8; no mezclar con Jakarta en esta línea |
 
@@ -94,6 +96,25 @@ Objetivo futuro: ejecutar también la batería de validación cripto en CI de fo
 | Retraso de empaquetado | Alta | Baja | P3; no bloquea núcleo |
 
 ---
+
+## Próximos pasos
+
+Orden de la rama de seguridad. Un ítem no se salta porque el anterior esté narrado: hace falta el gate en verde.
+
+| Orden | ID | Qué hay que hacer | Cierre medible |
+|---:|---|---|---|
+| 1 | SEC-2026-002 | Corregir los OID inválidos `1.56.23.1` y `1.56.23.2` del fixture `TestPadesBaseline` y dejar un test que exija su rechazo | La clase pasa en JDK 8 |
+| 2 | SEC-2026-003 | Hacer fail-closed `SecureXmlBuilder` y `SecureXmlTransformer` y migrar las factorías directas que quedan | Un fallo al fijar una feature aborta el parseo |
+| 3 | SEC-2026-004 | Suite XXE de ocho casos (fichero, HTTP, DTD, XInclude, billion laughs, XSLT, XSD, XML válido) | Sin lectura ni conexión |
+| 4 | SEC-2026-005 | Fijar por SHA las 9 Actions mutables de `ci.yml` | `check-actions-pinning.sh` sale 0 |
+| 5 | SEC-2026-006 | CodeQL y Semgrep con SARIF archivado | Cero alertas altas sin triage |
+| 6 | SEC-2026-007 | Dependency Review en el PR. SBOM y CVE gate cuando exista `NVD_API_KEY` | El delta de dependencias bloquea altas y críticas nuevas |
+| 7 | SEC-2026-008 | Política de generación: SHA-1 rechazado salvo la excepción documentada de ODF | Test negativo de generación |
+| 8 | SEC-2026-012 | Categoría obligatoria en `@Ignore` nuevos | Cero skips opacos en el diff |
+| 9 | SEC-2026-010 | Doble build del JAR en worktrees limpios | Mismo SHA-256, o la primera entrada ZIP distinta publicada |
+| 10 | SEC-2026-011 | Tag `v1.9.1-community.1` firmado, SBOM, `SHA256SUMS` y atestación | `gh attestation verify` contra este repositorio |
+
+No se abre release, no se reescribe el historial y no se envía el aviso de la serie `4AFA8450` hasta un sí distinto. El reactor `-Psonar` y los quince POM fuera de perfil (applets, webstart, miniapplet) quedan inventariados; no bloquean el núcleo, pero tampoco se dan por compilados.
 
 ## Criterios de éxito P1 (cumplidos en el fork)
 
