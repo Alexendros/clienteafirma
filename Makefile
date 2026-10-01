@@ -34,6 +34,9 @@ quality: lint
 test:
 	mvn -B -pl afirma-core test
 
+test-crypto:
+	cd tests/validation-harness && mvn -B test
+
 test-community:
 	bash scripts/ci-community-test.sh
 
@@ -45,6 +48,8 @@ build:
 	mvn -B -pl afirma-core -am package -DskipTests
 
 validate: lint quality test test-community smoke
+
+validate-full: validate test-crypto
 
 review360:
 	bash scripts/verify-code-review-360.sh
