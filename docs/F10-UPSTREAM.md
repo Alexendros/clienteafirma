@@ -24,6 +24,8 @@ Cada mejora **genérica** de F4–F8 se ofrece como PR a [ctt-gob-es/clienteafir
 | AF2026-5 | Accesibilidad EN 301 549 (3 flujos) | Fork + posible CTT | En integración | Nombres accesibles; Orca pendiente |
 | AF2026-6 | Integr@ iText 2.2 HTTP blocker | ctt-gob-es/integra | **Candidato a issue** | Sustituir repo HTTP / coordenada iText |
 | AF2026-7 | SecureXmlBuilder en sinks XXE (hash/OOXML/triphase) | Fork | **Hecho** — [#4](https://github.com/Alexendros/clienteafirma/pull/4) @ `fee3debe1` | Sin PR a CTT en esta tanda; SEC-007/008 |
+| AF2026-8 | Workflow release.yml (SemVer, tags GPG, GitHub Releases) | Fork | **Planificado** | P2-RELEASE en ROADMAP |
+| AF2026-9 | Empaquetado Linux completo (DEB/RPM/Flatpak/AppImage) | Fork | **En desarrollo** | P2-PACK en ROADMAP |
 
 ## Primer aporte
 
@@ -34,6 +36,6 @@ Detalle técnico: `docs/F4-INVENTARIO-CRIPTO.md` y `docs/F9-INTEGRA-FIRE.md`.
 
 - [x] Tabla pública de seguimiento
 - [x] Al menos un aporte **preparado** (issue AF2026-1 / AF2026-6)
-- [x] Issue abierto en GitHub: https://github.com/ctt-gob-es/clienteafirma/issues/572
+- [x] Issue abierta en GitHub: https://github.com/ctt-gob-es/clienteafirma/issues/572
 
 Actualizar esta tabla en cada fase.

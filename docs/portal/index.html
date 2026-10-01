@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Portal de descargas verificables de Autofirma-2026 — Fork comunitario de Autofirma 1.9.1 (CTT)">
+  <meta name="theme-color" content="#3b4fb8">
+  <title>Autofirma-2026 — Descargas verificables</title>
+  <link rel="preconnect" href="https://github.com" crossorigin>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="components.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+  <header class="hero">
+    <h1 class="hero-title">Autofirma-2026</h1>
+    <p class="hero-subtitle">Descargas verificables del fork comunitario de <a href="https://github.com/ctt-gob-es/clienteafirma">Autofirma 1.9.1 (CTT)</a> — mismo protocolo <code>afirma://</code> y formatos CAdES, XAdES, PAdES, FacturaE.</p>
+    <div class="hero-meta">
+      <span class="badge badge-info">Licencia: GPL-2.0+ / EUPL-1.1</span>
+      <span class="badge badge-neutral" id="version-badge">Versión: 1.9.1-autofirma2026.0</span>
+      <span class="badge badge-neutral" id="date-badge">Release: <time datetime="2026-10-01">2026-10-01</time></span>
+    </div>
+  </header>
+
+  <main id="main-content" class="container">
+    <section class="section protocol-test" aria-labelledby="protocol-title">
+      <div class="section-header">
+        <h2 id="protocol-title" class="section-title">Prueba de protocolo <code>afirma://</code></h2>
+        <p class="section-description">Este botón comprueba que tu sistema operativo asocia <code>x-scheme-handler/afirma</code> al cliente instalado.</p>
+      </div>
+      <div class="protocol-test">
+        <button type="button" id="launch" class="btn btn-primary btn-lg protocol-test-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          Abrir Autofirma (afirma://)
+        </button>
+        <p id="status" class="protocol-test-status" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <hr>
+
+    <section class="section" aria-labelledby="downloads-title">
+      <div class="section-header">
+        <h2 id="downloads-title" class="section-title">Descargas por plataforma</h2>
+        <p class="section-description">Todos los artefactos incluyen firma GPG (<code>.asc</code>) y checksums SHA256. Los archivos <code>SHA256SUMS</code> y <code>SHA256SUMS.asc</code> agrupan todos los hashes.</p>
+      </div>
+
+      <div class="grid-cards">
+        <!-- DEB -->
+        <article class="card card-success">
+          <header class="card-header">
+            <h3 class="card-title">Linux — DEB</h3>
+            <p class="card-subtitle">Debian, Ubuntu, Linux Mint, derivados</p>
+          </header>
+          <div class="card-body">
+            <p class="verify-links">
+              <a href="https://github.com/Soluciones-Alexendros/clienteafirma-alexendros/releases/latest/download/autofirma-2026_1.9.1-autofirma2026.0_all.deb" class="verify-link" download>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                autofirma-2026_1.9.1-autofirma2026.0_all.deb
+              </a>
+              <a href="https://github.com/Soluciones-Alexendros/clienteafirma-alexendros/releases/latest/download/autofirma-2026_1.9.1-autofirma2026.0_all.deb.asc" class="verify-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                Firma GPG
+              </a>
+            </p>
+            <div class="checksum">
+              <span class="checksum-value">cd1a71dba913e0280e8f7ec4322e995ec75986677a8faf97a8e9712216ce03c7</span>
+            </div>
+          </div>
+          <footer class="card-footer">
+            <span class="badge badge-success">SHA256 verificado</span>
+            <span class="badge badge-info">Tamaño: ~54 MB</span>
+          </footer>
+        </article>
+
+        <!-- RPM -->
+        <article class="card card-pending">
+          <header class="card-header">
+            <h3 class="card-title">Linux — RPM</h3>
+            <p class="card-subtitle">Fedora, RHEL, openSUSE, AlmaLinux, Rocky</p>
+          </header>
+          <div class="card-body">
+            <p class="verify-links">
+              <a href="https://github.com/Soluciones-Alexendros/clienteafirma-alexendros/releases/latest/download/autofirma-2026-1.9.1-1.x86_64.rpm" class="verify-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                autofirma-2026-1.9.1-1.x86_64.rpm
+              </a>
+              <a href="https://github.com/Soluciones-Alexendros/clienteafirma-alexendros/releases/latest/download/autofirma-2026-1.9.1-1.x86_64.rpm.asc" class="verify-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                Firma GPG
+              </a>
+            </p>
+            <div class="checksum">
+              <span class="checksum-value"><em>pendiente — se genera al publicar release</em></span>
+            </div>
+          </div>
+          <footer class="card-footer">
+            <span class="badge badge-warning">Checksum pendiente</span>
+            <span class="badge badge-neutral">Generado en release</span>
+          </footer>
+        </article>
+
+        <!-- AppImage -->
+        <article class="card card-pending">
+          <header class="card-header">
+            <h3 class="card-title">Linux — AppImage</h3>
+            <p class="card-subtitle">Universal, sin instalación (x86_64)</p>
+          </header>
+          <div class="card-body">
+            <p class="verify-links">
+              <a href="https://github.com/Soluciones-Alexendros/clienteafirma-alexendros/releases/latest/download/Autofirma-1.9.1-autofirma2026.0-x86_64.AppImage" class="verify-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Autofirma-1.9.1-autofirma2026.0-x86_64.AppImage
+              </a>
+              <a href="https://github.com/Soluciones-Alexendros/clienteafirma-alexendros/releases/latest/download/Autofirma-1.9.1-autofirma2026.0-x86_64.AppImage.asc" class="verify-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                Firma GPG
+              </a>
+            </p>
+            <div class="checksum">
+              <span class="checksum-value"><em>pendiente — se genera al publicar release</em></span>
+            </div>
+          </div>
+          <footer class="card-footer">
+            <span class="badge badge-warning">Checksum pendiente</span>
+            <span class="badge badge-neutral">Generado en release</span>
+          </footer>
+        </article>
+
+        <!-- Flatpak -->
+        <article class="card">
+          <header class="card-header">
+            <h3 class="card-title">Linux — Flatpak</h3>
+            <p class="card-subtitle">Próximamente en Flathub</p>
+          </header>
+          <div class="card-body">
+            <p>En desarrollo. Publicación prevista en <a href="https://flathub.org" class="verify-link">Flathub</a>.</p>
+            <div class="checksum">
+              <span class="checksum-value"><em>no disponible aún</em></span>
+            </div>
+          </div>
+          <footer class="card-footer">
+            <span class="badge badge-info">En desarrollo</span>
+          </footer>
+        </article>
+
+        <!-- JAR -->
+        <article class="card card-success">
+          <header class="card-header">
+            <h3 class="card-title">Multiplataforma — JAR</h3>
+            <p class="card-subtitle">Requiere Java 8+ (JRE o JDK)</p>
+          </header>
+          <div class="card-body">
+            <p class="verify-links">
+              <a href="https://github.com/Soluciones-Alexendros/clienteafirma-alexendros/releases/latest/download/autofirma-1.9.1-autofirma2026.0.jar" class="verify-link" download>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                autofirma-1.9.1-autofirma2026.0.jar
+              </a>
+              <a href="https://github.com/Soluciones-Alexendros/clienteafirma-alexendros/releases/latest/download/autofirma-1.9.1-autofirma2026.0.jar.asc" class="verify-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                Firma GPG
+              </a>
+            </p>
+            <div class="checksum">
+              <span class="checksum-value">b82ccf58be393a7e409534de2995eef71ab2df57b3ace79b45123a6f9eafe921</span>
+            </div>
+          </div>
+          <footer class="card-footer">
+            <span class="badge badge-success">SHA256 verificado</span>
+            <span class="badge badge-neutral">Tamaño: ~54 MB</span>
+          </footer>
+        </article>
+      </div>
+
+      <!-- Checksums globales -->
+      <div class="card mt-6">
+        <header class="card-header">
+          <h3 class="card-title">Checksums globales y claves</h3>
+        </header>
+        <div class="card-body">
+          <p class="verify-links">
+            <a href="https://github.com/Soluciones-Alexendros/clienteafirma-alexendros/releases/latest/download/SHA256SUMS" class="verify-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              SHA256SUMS
+            </a>
+            <a href="https://github.com/Soluciones-Alexendros/clienteafirma-alexendros/releases/latest/download/SHA256SUMS.asc" class="verify-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              SHA256SUMS.asc
+            </a>
+            <a href="https://github.com/Soluciones-Alexendros/clienteafirma-alexendros/releases/latest/download/autofirma.pub" class="verify-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              Clave pública GPG
+            </a>
+          </p>
+          <div class="checksum" id="gpg-fingerprint">
+            <span class="checksum-value">GPG Fingerprint: <span id="fingerprint-value">Cargando…</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr>
+
+    <section class="section" aria-labelledby="verify-title">
+      <div class="section-header">
+        <h2 id="verify-title" class="section-title">Cómo verificar la integridad</h2>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <pre><code># 1. Importar clave pública del mantenedor
+gpg --import autofirma.pub
+
+# 2. Verificar firma GPG de un artefacto (ej. DEB)
+gpg --verify autofirma-2026_1.9.1-autofirma2026.0_all.deb.asc autofirma-2026_1.9.1-autofirma2026.0_all.deb
+
+# 3. Verificar firma del archivo de checksums
+gpg --verify SHA256SUMS.asc SHA256SUMS
+
+# 4. Verificar checksums SHA256
+sha256sum -c SHA256SUMS</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="build-title">
+      <div class="section-header">
+        <h2 id="build-title" class="section-title">Compilar tú mismo</h2>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <pre><code>git clone https://github.com/Soluciones-Alexendros/clienteafirma-alexendros.git
+cd clienteafirma-alexendros
+bash scripts/mvp.sh</code></pre>
+          <p class="text-muted mt-3">Ver <a href="../BASELINE.txt">BASELINE.txt</a> para el pin de sincronización con upstream CTT.</p>
+        </div>
+      </div>
+    </section>
+
+    <hr>
+
+    <section class="section" aria-labelledby="cli-title">
+      <div class="section-header">
+        <h2 id="cli-title" class="section-title">Firma por CLI (Firefox / Chromium sin handler)</h2>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <pre><code>autofirma sign -i documento.pdf -o documento-firmado.pdf \
+  -store pkcs12:/ruta/cert.p12 -password *** -alias "alias" -format pades</code></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Repositorio: <a href="https://github.com/Soluciones-Alexendros/clienteafirma-alexendros">Soluciones-Alexendros/clienteafirma-alexendros</a></p>
+    <p>No sustituye a los servicios de validación del Estado: <code>@firma</code>, <code>VALIDe</code>, <code>Cl@ve</code>, <code>Port@firmas</code>, <code>TS@</code>.</p>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    // Cargar fingerprint GPG dinámicamente
+    async function loadGPGFingerprint() {
+      try {
+        const resp = await fetch('https://api.github.com/repos/Soluciones-Alexendros/clienteafirma-alexendros/releases/latest');
+        if (resp.ok) {
+          const release = await resp.json();
+          const pubAsset = release.assets.find(a => a.name === 'autofirma.pub');
+          if (pubAsset) {
+            const pubResp = await fetch(pubAsset.browser_download_url);
+            if (pubResp.ok) {
+              const pubKey = await pubResp.text();
+              // Extraer fingerprint de la clave pública (simplificado)
+              const lines = pubKey.split('\n');
+              const keyLine = lines.find(l => l.includes('pub') || l.includes('Key fingerprint'));
+              document.getElementById('fingerprint-value').textContent = keyLine?.trim() || 'Ver en release page';
+            }
+          }
+        }
+      } catch (e) {
+        document.getElementById('fingerprint-value').textContent = 'Ver en release page: ' + e.message;
+      }
+    }
+    loadGPGFingerprint();
+
+    // Actualizar badges con info del release
+    async function updateReleaseInfo() {
+      try {
+        const resp = await fetch('https://api.github.com/repos/Soluciones-Alexendros/clienteafirma-alexendros/releases/latest');
+        if (resp.ok) {
+          const release = await resp.json();
+          const tag = release.tag_name.replace(/^v/, '');
+          document.getElementById('version-badge').textContent = `Versión: ${tag}`;
+          if (release.published_at) {
+            const date = new Date(release.published_at).toISOString().split('T')[0];
+            document.getElementById('date-badge').innerHTML = `Release: <time datetime="${date}">${date}</time>`;
+          }
+        }
+      } catch (e) {
+        console.warn('No se pudo cargar info del release:', e);
+      }
+    }
+    updateReleaseInfo();
+  </script>
+</body>
+</html>

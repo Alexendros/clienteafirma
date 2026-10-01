@@ -2,34 +2,101 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <title>Portal de prueba afirma:// — Autofirma-2026 F6</title>
+  <title>Portal de descarga — Autofirma-2026</title>
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; }
+    body { font-family: system-ui, sans-serif; max-width: 60rem; margin: 2rem auto; padding: 0 1rem; }
     code { background: #f4f4f4; padding: 0.1em 0.3em; }
     button { font-size: 1.1rem; padding: 0.5rem 1rem; }
+    .artifact { border: 1px solid #ddd; border-radius: 0.5rem; padding: 1rem; margin: 1rem 0; }
+    .artifact h3 { margin-top: 0; }
+    .checksum { font-family: monospace; font-size: 0.85rem; word-break: break-all; background: #f8f8f8; padding: 0.5rem; }
+    .verify { margin-top: 0.5rem; }
   </style>
 </head>
 <body>
-  <h1>Prueba de protocolo <code>afirma://</code></h1>
-  <p>
-    Este portal mínimo comprueba que el SO asocia <code>x-scheme-handler/afirma</code>
-    al cliente empaquetado en F6. No sustituye un trámite real de AAPP.
-  </p>
-  <p>
-    <button type="button" id="launch">Abrir Autofirma (afirma://)</button>
-  </p>
+  <h1>Autofirma-2026 — Descargas verificables</h1>
+  <p>Fork comunitario de <a href="https://github.com/ctt-gob-es/clienteafirma">Autofirma 1.9.1 (CTT)</a> — mismo protocolo <code>afirma://</code> y formatos (CAdES, XAdES, PAdES, FacturaE).</p>
+  <p><strong>Licencia:</strong> GPL-2.0+ / EUPL-1.1</p>
+
+  <hr />
+
+  <h2>Prueba de protocolo <code>afirma://</code></h2>
+  <p>Este botón comprueba que el SO asocia <code>x-scheme-handler/afirma</code> al cliente instalado.</p>
+  <button type="button" id="launch">Abrir Autofirma (afirma://)</button>
   <p id="status" role="status"></p>
   <script>
-    // Invocación mínima: abre el cliente. Un trámite real usa autoscript.js 1.9.
     document.getElementById('launch').onclick = function () {
       var url = 'afirma://';
       document.getElementById('status').textContent = 'Invocando ' + url + ' …';
       window.location.href = url;
     };
   </script>
+
+  <hr />
+
+  <h2>Descargas por plataforma</h2>
+
+  <div class="artifact">
+    <h3>Linux — DEB (Debian, Ubuntu, derivados)</h3>
+    <p><a href="https://github.com/Alexendros/clienteafirma/releases/latest/download/autofirma-2026_1.9.1-autofirma2026.0_all.deb">autofirma-2026_1.9.1-autofirma2026.0_all.deb</a></p>
+    <p class="checksum">SHA256: cd1a71dba913e0280e8f7ec4322e995ec75986677a8faf97a8e9712216ce03c7</p>
+    <p class="verify"><a href="https://github.com/Alexendros/clienteafirma/releases/latest/download/autofirma-2026_1.9.1-autofirma2026.0_all.deb.asc">Firma GPG (.asc)</a> | <a href="https://github.com/Alexendros/clienteafirma/releases/latest/download/SHA256SUMS">SHA256SUMS</a> | <a href="https://github.com/Alexendros/clienteafirma/releases/latest/download/SHA256SUMS.asc">SHA256SUMS.asc</a></p>
+  </div>
+
+  <div class="artifact">
+    <h3>Linux — RPM (Fedora, RHEL, openSUSE, derivados)</h3>
+    <p><a href="https://github.com/Alexendros/clienteafirma/releases/latest/download/autofirma-2026-1.9.1-1.x86_64.rpm">autofirma-2026-1.9.1-1.x86_64.rpm</a></p>
+    <p class="checksum">SHA256: <em>pendiente — se genera al publicar release</em></p>
+    <p class="verify"><a href="https://github.com/Alexendros/clienteafirma/releases/latest/download/autofirma-2026-1.9.1-1.x86_64.rpm.asc">Firma GPG (.asc)</a> | <a href="https://github.com/Alexendros/clienteafirma/releases/latest/download/SHA256SUMS">SHA256SUMS</a> | <a href="https://github.com/Alexendros/clienteafirma/releases/latest/download/SHA256SUMS.asc">SHA256SUMS.asc</a></p>
+  </div>
+
+  <div class="artifact">
+    <h3>Linux — AppImage (universal, sin instalar)</h3>
+    <p><a href="https://github.com/Alexendros/clienteafirma/releases/latest/download/Autofirma-1.9.1-autofirma2026.0-x86_64.AppImage">Autofirma-1.9.1-autofirma2026.0-x86_64.AppImage</a></p>
+    <p class="checksum">SHA256: <em>pendiente — se genera al publicar release</em></p>
+    <p class="verify"><a href="https://github.com/Alexendros/clienteafirma/releases/latest/download/Autofirma-1.9.1-autofirma2026.0-x86_64.AppImage.asc">Firma GPG (.asc)</a> | <a href="https://github.com/Alexendros/clienteafirma/releases/latest/download/SHA256SUMS">SHA256SUMS</a> | <a href="https://github.com/Alexendros/clienteafirma/releases/latest/download/SHA256SUMS.asc">SHA256SUMS.asc</a></p>
+  </div>
+
+  <div class="artifact">
+    <h3>Linux — Flatpak (próximamente)</h3>
+    <p>En desarrollo. Publicación prevista en <a href="https://flathub.org">Flathub</a>.</p>
+  </div>
+
+  <div class="artifact">
+    <h3>Multiplataforma — JAR (requiere Java 8+)</h3>
+    <p><a href="https://github.com/Alexendros/clienteafirma/releases/latest/download/autofirma-1.9.1-autofirma2026.0.jar">autofirma-1.9.1-autofirma2026.0.jar</a></p>
+    <p class="checksum">SHA256: b82ccf58be393a7e409534de2995eef71ab2df57b3ace79b45123a6f9eafe921</p>
+    <p class="verify"><a href="https://github.com/Alexendros/clienteafirma/releases/latest/download/autofirma-1.9.1-autofirma2026.0.jar.asc">Firma GPG (.asc)</a> | <a href="https://github.com/Alexendros/clienteafirma/releases/latest/download/SHA256SUMS">SHA256SUMS</a> | <a href="https://github.com/Alexendros/clienteafirma/releases/latest/download/SHA256SUMS.asc">SHA256SUMS.asc</a></p>
+  </div>
+
+  <hr />
+
+  <h2>Cómo verificar la integridad</h2>
+  <pre><code># 1. Importar clave pública del mantenedor
+gpg --import mantenedor.pub
+
+# 2. Verificar firma GPG de un artefacto (ej. DEB)
+gpg --verify autofirma-2026_1.9.1-autofirma2026.0_all.deb.asc autofirma-2026_1.9.1-autofirma2026.0_all.deb
+
+# 3. Verificar checksum SHA256
+sha256sum -c SHA256SUMS
+</code></pre>
+
+  <h2>Compilar tú mismo</h2>
+  <pre><code>git clone https://github.com/Alexendros/clienteafirma.git
+cd clienteafirma
+bash scripts/mvp.sh
+</code></pre>
+  <p>Ver <a href="docs/BASELINE.txt">BASELINE.txt</a> para el pin de sincronización con upstream CTT.</p>
+
   <hr />
   <h2>Firma por CLI (Firefox / Chromium sin handler)</h2>
   <pre>autofirma sign -i documento.pdf -o documento-firmado.pdf \
   -store pkcs12:/ruta/cert.p12 -password *** -alias "alias" -format pades</pre>
+
+  <footer style="margin-top: 3rem; font-size: 0.85rem; color: #666;">
+    <p>Repositorio: <a href="https://github.com/Alexendros/clienteafirma">Alexendros/clienteafirma</a> → destino: <a href="https://github.com/Soluciones-Alexendros/clienteafirma-alexendros">Soluciones-Alexendros/clienteafirma-alexendros</a></p>
+    <p>No sustituye a los servicios de validación del Estado: @firma, VALIDe, Cl@ve, Port@firmas, TS@.</p>
+  </footer>
 </body>
 </html>

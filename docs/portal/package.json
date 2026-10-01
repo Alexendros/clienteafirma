@@ -1,0 +1,26 @@
+{
+  "name": "autofirma-portal",
+  "version": "1.0.0",
+  "description": "Portal de descargas verificables de Autofirma-2026",
+  "type": "module",
+  "scripts": {
+    "validate": "node validate-portal.mjs",
+    "validate:ci": "node validate-portal.mjs --ci",
+    "serve": "npx serve . -p 8080"
+  },
+  "keywords": [
+    "autofirma",
+    "portal",
+    "downloads",
+    "verification"
+  ],
+  "author": "Autofirma-2026 Community",
+  "license": "GPL-2.0-or-later AND EUPL-1.1",
+  "devDependencies": {
+    "html-validate": "^8.0.0",
+    "axe-core": "^4.8.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

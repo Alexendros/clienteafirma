@@ -1,6 +1,8 @@
-# Flatpak skeleton (no build required for W4)
-# Runtime: org.freedesktop.Platform // 23.08
-# Nota: no se publica en Flathub en esta oleada; solo manifiesto de arranque.
+# Flatpak manifest for Autofirma-2026
+# Build with: flatpak-builder --repo=repo build-dir org.autofirma.Autofirma2026.yml
+# Install with: flatpak install --user repo es.gob.afirma.Autofirma2026
+# Run with: flatpak run es.gob.afirma.Autofirma2026
+# Publish to Flathub after review: https://github.com/flathub/flathub
 
 app-id: es.gob.afirma.Autofirma2026
 runtime: org.freedesktop.Platform
@@ -14,15 +16,25 @@ finish-args:
   - --socket=wayland
   - --device=dri
   - --filesystem=home
+  - --talk-name=org.freedesktop.portal.Desktop
+  - --own-name=org.freedesktop.portal.Desktop
+  # Permisos para DNIe / tarjetas inteligentes
+  - --device=all
+  - --filesystem=/run/user/1000/gnupg:ro
+  # Protocolo afirma://
+  - --env=MIME_TYPES=x-scheme-handler/afirma
+
 modules:
   - name: autofirma
     buildsystem: simple
     build-commands:
       - install -D autofirma.jar /app/share/autofirma/autofirma.jar
       - install -D autofirma.sh /app/bin/autofirma
+      - install -D autofirma.desktop /app/share/applications/autofirma.desktop
+      - install -D autofirma.png /app/share/icons/hicolor/256x256/apps/autofirma.png
     sources:
       - type: file
-        path: ../../clienteafirma/afirma-simple/target/autofirma.jar
+        path: ../../afirma-simple/target/autofirma.jar
         dest-filename: autofirma.jar
       - type: script
         dest-filename: autofirma.sh
@@ -30,3 +42,18 @@ modules:
           - |
             #!/bin/sh
             exec java -jar /app/share/autofirma/autofirma.jar "$@"
+      - type: file
+        path: autofirma.desktop
+        dest-filename: autofirma.desktop
+      - type: file
+        path: autofirma.png
+        dest-filename: autofirma.png
+
+# Metadatos para Flathub
+rename-desktop-file: autofirma.desktop
+rename-icon: autofirma.png
+
+# Datos de la aplicación (para AppStream)
+add-metadata:
+  - key: x-scheme-handler/afirma
+    value: es.gob.afirma.Autofirma2026

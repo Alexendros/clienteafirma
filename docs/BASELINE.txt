@@ -6,3 +6,5 @@ DATE=2026-10-01T00:00:00Z
 NOTE=Working tree canónico hoy: Alexendros/clienteafirma (monorepo). Destino de org: Soluciones-Alexendros/clienteafirma-alexendros. BASELINE_COMMIT pinea sync con upstream CTT 1.9.1.
 CANONICAL_REPO=https://github.com/Alexendros/clienteafirma
 CANONICAL_REPO_DEST=https://github.com/Soluciones-Alexendros/clienteafirma-alexendros
+RELEASE_WORKFLOW=.github/workflows/release.yml (pendiente)
+PACKAGING_DIR=packaging/ (DEB funcional, RPM/Flatpak/AppImage en desarrollo)

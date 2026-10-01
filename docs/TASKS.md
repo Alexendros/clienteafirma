@@ -17,6 +17,8 @@
 | T-A11Y | Integrar nombres accesibles (lista de certificados, PIN, confirmar) | PR mergeado + CI verde; sin cambiar el comportamiento de firma | Rama `a11y/signing-flows` → PR a `master` |
 | T-TLS | Preferencia `strictSslChecks` opt-in (por defecto off) | PR mergeado; default sigue compatible con sedes | Rama `prefs/strict-ssl` → PR a `master` |
 | T-ORG | Trasladar repo a `Soluciones-Alexendros/clienteafirma-alexendros` | Remoto canónico = nueva URL; Actions responden | Transfer + rename |
+| T-RELEASE | Workflow `release.yml` (SemVer, tags firmados, GitHub Releases) | Tag `v*` → Release publicado con artefactos firmados | `.github/workflows/release.yml` |
+| T-PACK | Empaquetado completo: DEB, RPM, Flatpak, AppImage + firmas/checksums | Artefactos en `dist/` con `.asc` y `SHA256SUMS*` | `packaging/` + `scripts/f6-*.sh` |
 | T-ARCHIFY | Suite Archify post-canon (5 diagramas en español) | `finalize` 5/5 pass + `SUITE-SUMMARY` con URL nueva | `.archify/…-canon-org/` |
 | T-ARCHIVE | Archivar meta `Alexendros/Autofirma-2026` | Repo read-only en GitHub | `gh repo archive` |
 
@@ -44,6 +46,7 @@
 | T-CTT-573 | Reintegración BC en upstream CTT | PR/issue CTT avanza | [#572](https://github.com/ctt-gob-es/clienteafirma/issues/572); #573 cerrada sin merge |
 | T-FLATPAK | AppImage/Flatpak usable | Paquete instalable documentado | Experimental / P3 |
 | T-OPENPDF | Coordinar PAdES con `openpdf-afirma` | Sin duplicar fork | F10 AF2026-4 |
+| T-REPO-RENAME | Actualizar referencias a nuevo remoto tras transfer | README, docs, CI, scripts | Post T-ORG |
 
 ---
 
@@ -60,7 +63,7 @@
 | F6 Paquetes Linux | Hecho (dev) | `packaging/` + MVP |
 | F7 Accesibilidad | En curso | T-A11Y + T-ORCA |
 | F8 Trifásico | Hecho (informe/WAR) | `docs/F8-TRIFASICA.md` |
-| F9 Integr@/FIRe | Hecho (con bloqueo Integr@) | `docs/F9-INTEGRA-FIRE.md` |
+| F9 Integr@/FIRe | Hecho | FIRe OK; Integr@ bloqueado iText HTTP — `docs/F9-INTEGRA-FIRE.md` |
 | F10 Upstream | Tabla viva | [F10-UPSTREAM.md](F10-UPSTREAM.md) |
 
 ---
@@ -72,4 +75,5 @@ make validate          # contrato + quality + tests + smoke
 make review360-r2      # gates revisión 360 R2
 make remediation360    # gates remediación
 bash scripts/mvp.sh    # build + F2 + empaquetado best-effort
+bash scripts/f3-release.sh --help   # ayuda release (cuando esté listo)
 ```

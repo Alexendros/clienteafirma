@@ -102,3 +102,23 @@ jobs:
 
       - name: Inventory + community smoke
         run: make smoke
+
+  validate-portal:
+    name: validate-portal
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: docs/portal/package-lock.json
+
+      - name: Install html-validate
+        run: npm install -g html-validate@latest
+
+      - name: Run portal validation
+        run: node docs/portal/validate-portal.mjs --ci

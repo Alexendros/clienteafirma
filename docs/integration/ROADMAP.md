@@ -6,7 +6,7 @@
 - **Estructura:** Matriz de prioridades → detalle P1–P3 → riesgos → criterios de éxito.
 - **Contenido a integrar según contexto:** Español claro; tecnicismos entre paréntesis. El tablero operativo diario está en [TASKS.md](../TASKS.md).
 
-**Fecha de refresco:** 2026-10-01 · **Versión:** 1.1  
+**Fecha de refresco:** 2026-10-01 · **Versión:** 2.0  
 **Canónico:** monorepo comunitario (destino [Soluciones-Alexendros/clienteafirma-alexendros](https://github.com/Soluciones-Alexendros/clienteafirma-alexendros)).
 
 ---
@@ -21,8 +21,12 @@
 | P1-TLS | Análisis de solape TLS con upstream | Hecho (análisis) | Preferencia opt-in; default sin endurecer. Código en integración (`prefs/strict-ssl`) |
 | P2-A11Y | Accesibilidad de flujos de firma | En integración | Rama `a11y/signing-flows`; sesión Orca pendiente |
 | P2-CI | Ampliar ejecución de tests en CI | Pendiente | Hoy `build-baseline` prioriza build + F2; parte del reactor usa skipTests |
-| P3-LINUX | Flatpak / AppImage | Experimental | No bloquea el núcleo |
+| P2-RELEASE | Gestión de releases (SemVer, tags firmados, GitHub Releases, workflow `release.yml`) | Pendiente | Nuevo: automatizar versionado y publicación |
+| P2-PACK | Empaquetado Linux completo (DEB, RPM, Flatpak, AppImage, portal, firmas, checksums) | En desarrollo | DEB funcional; RPM/Flatpak/AppImage pendientes |
+| P3-LINUX | Flatpak / AppImage listos para usuarios | Experimental | No bloquea el núcleo |
 | P3-TRIPHASE | Servidor trifásico (firma en tres pasos con servidor) | Experimental | Informe F8; no mezclar con Jakarta en esta línea |
+| P3-ORG | Traslado a organización `Soluciones-Alexendros` | Pendiente | Transfer + rename repo |
+| P3-ARCHIVE | Archivar meta `Alexendros/Autofirma-2026` | Pendiente | `gh repo archive` |
 
 ---
 
@@ -37,7 +41,7 @@
 - ~95 archivos tocados; diff limpio frente a upstream del orden de ~1000 líneas funcionales.
 - 13 módulos cripto afectados.
 - Construcción y vectores F2 (firma de prueba CAdES/XAdES/PAdES/FacturaE/cofirma/contrafirma) en verde en el monorepo.
-- Corrección: el “ruido” de espacios en el diff bruto era ~92 %; la cifra útil es la del diff limpio.
+- Corrección: el "ruido" de espacios en el diff bruto era ~92 %; la cifra útil es la del diff limpio.
 
 **Upstream:** la PR #573 al CTT no se fusionó. El trabajo vive en este monorepo; la issue #572 sigue el hilo.
 
@@ -76,10 +80,43 @@ Objetivo futuro: ejecutar también la batería de validación cripto en CI de fo
 
 ---
 
-## P3 — Empaquetado y trifásico (no bloqueantes)
+## P2-RELEASE — Gestión de releases (nuevo)
 
-- Linux moderno (Flatpak/AppImage): experimental.
-- Servidor trifásico: compatible a nivel de informe/WAR; validación en sandbox diferida.
+**Objetivo:** Automatizar el ciclo de publicación con:
+- **SemVer** (versionado semántico): MAJOR.MINOR.PATCH
+- **Tags firmados** GPG en Git
+- **GitHub Releases** con artefactos y notas
+- **Workflow `release.yml`** que publique al crear tag `v*`
+
+**Entregables esperados:**
+- Script `scripts/f3-release.sh` (ya existe, ampliar)
+- Workflow `.github/workflows/release.yml`
+- Documentación de proceso en `docs/RELEASE-PROCESS.md`
+
+---
+
+## P2-PACK — Empaquetado Linux completo (en desarrollo)
+
+**Objetivo:** Paquetes instalables y verificables para distribuciones principales.
+
+| Formato | Estado | Qué falta |
+|---------|--------|-----------|
+| **DEB** | Funcional (`packaging/autofirma-2026_1.9.1-autofirma2026.0_all.deb`) | Firmas GPG, checksums SHA256, repositorio APT |
+| **RPM** | Staging (`packaging/stage-rpm/`) | SPEC completo, firma RPM, repositorio DNF/YUM |
+| **Flatpak** | Estructura (`packaging/flatpak/`) | Manifest completo, permisos, publicación en Flathub |
+| **AppImage** | Script (`scripts/f6-appimage.sh`) | Integración en CI, firma, checksums |
+| **Portal de prueba** | `packaging/portal-prueba/index.html` | Página de descarga con firmas y checksums visibles |
+
+**Seguridad:** Todos los artefactos deben llevar firma GPG (`.asc`) y `SHA256SUMS` / `SHA256SUMS.asc` en `dist/`.
+
+---
+
+## P3 — Empaquetado y organización (no bloqueantes)
+
+- **P3-LINUX**: Flatpak/AppImage listos para usuarios finales.
+- **P3-TRIPHASE**: Servidor trifásico compatible a nivel de informe/WAR; validación en sandbox diferida.
+- **P3-ORG**: Traslado del repositorio a `Soluciones-Alexendros/clienteafirma-alexendros`.
+- **P3-ARCHIVE**: Archivar el meta-repositorio histórico `Alexendros/Autofirma-2026`.
 
 ---
 
@@ -92,6 +129,8 @@ Objetivo futuro: ejecutar también la batería de validación cripto en CI de fo
 | Conflicto al reintegrar en CTT | Alta | Media | Diff limpio; issue #572 |
 | Cambiar TLS por defecto | Baja | Alta | Solo opt-in |
 | Retraso de empaquetado | Alta | Baja | P3; no bloquea núcleo |
+| Publicar release sin firmar | Media | Alta | Workflow exige firma GPG |
+| Transferencia de org falla | Baja | Alta | Confirmación explícita previa |
 
 ---
 
@@ -102,6 +141,20 @@ Objetivo futuro: ejecutar también la batería de validación cripto en CI de fo
 - [x] 12/12 tests nuevos en verde
 - [x] JAR de producto + F2 sin regresión de formatos
 - [x] Decisión TLS documentada (default no estricto)
+
+## Criterios de éxito P2 (en curso)
+
+- [ ] `prefs/strict-ssl` mergeado a `master` con CI verde
+- [ ] `a11y/signing-flows` mergeado a `master` con CI verde
+- [ ] Workflow `release.yml` funcional (tag `v*` → GitHub Release firmado)
+- [ ] Paquetes DEB/RPM/Flatpak/AppImage con firmas y checksums en `dist/`
+- [ ] Sesión Orca documentada (F7)
+
+## Criterios de éxito P3 (pendientes)
+
+- [ ] Repo transferido a `Soluciones-Alexendros/clienteafirma-alexendros`
+- [ ] Meta `Alexendros/Autofirma-2026` archivado
+- [ ] Suite Archify post-canon publicada (5 diagramas)
 
 ---
 

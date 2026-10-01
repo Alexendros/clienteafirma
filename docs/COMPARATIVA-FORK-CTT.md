@@ -38,6 +38,8 @@ Si una sede acepta firmas del cliente oficial, el objetivo de este fork es que *
 | TLS estricto | Comportamiento histórico compatible con sedes | Preferencia **opt-in** `strictSslChecks` (por defecto **desactivada**) | No se endurece TLS por defecto |
 | Accesibilidad (a11y) | Deuda frente a EN 301 549 | Nombres accesibles en elegir certificado / PIN / confirmar (en integración) | Sesión con lector de pantalla Orca aún pendiente |
 | Documentación de programa | README de producto CTT | Fases F0–F10, ROADMAP, TASKS, Archify | Orientada a ciudadanos y mantenedores |
+| Gestión de releases | No hay workflow de release público | **Workflow `release.yml` (planificado)**: SemVer, tags GPG, GitHub Releases | — |
+| Empaquetado Linux completo | Solo instalador oficial del Estado | **DEB, RPM, Flatpak, AppImage** + firmas GPG + checksums SHA256 (en desarrollo) | Portal de prueba en `packaging/portal-prueba/` |
 
 ---
 

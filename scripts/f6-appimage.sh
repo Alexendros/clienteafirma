@@ -4,6 +4,7 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 JAR="${AUTOFIRMA_JAR:-$ROOT/afirma-simple/target/autofirma.jar}"
+VER="${AUTOFIRMA_VERSION:-1.9.1-autofirma-alexendros}"
 OUT="${1:-$ROOT/dist/appimage}"
 APPDIR="$OUT/Autofirma.AppDir"
 
@@ -58,9 +59,16 @@ EOF
 chmod 755 "$APPDIR/AppRun"
 
 echo "AppDir listo: $APPDIR"
+APPIMAGE_FILE="$OUT/Autofirma-${VER}-x86_64.AppImage"
 if command -v appimagetool >/dev/null 2>&1; then
-  appimagetool "$APPDIR" "$OUT/Autofirma-x86_64.AppImage"
-  echo "AppImage: $OUT/Autofirma-x86_64.AppImage"
+  appimagetool "$APPDIR" "$APPIMAGE_FILE"
+  echo "AppImage: $APPIMAGE_FILE"
 else
   echo "appimagetool no instalado — usa el AppDir o instálalo para empaquetar."
+  exit 1
 fi
+
+# Copy to dist for release workflow
+cp -f "$APPIMAGE_FILE" "$ROOT/dist/"
+
+echo "F6 AppImage OK"

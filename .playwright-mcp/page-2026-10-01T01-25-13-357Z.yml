@@ -1,0 +1,113 @@
+- generic [active] [ref=f2e1]:
+  - heading "Autofirma-2026 — Descargas verificables" [level=1] [ref=f2e2]
+  - paragraph [ref=f2e3]:
+    - text: Fork comunitario de
+    - link "Autofirma 1.9.1 (CTT)" [ref=f2e4] [cursor=pointer]:
+      - /url: https://github.com/ctt-gob-es/clienteafirma
+    - text: — mismo protocolo
+    - code [ref=f2e5]: afirma://
+    - text: y formatos (CAdES, XAdES, PAdES, FacturaE).
+  - paragraph [ref=f2e6]:
+    - strong [ref=f2e7]: "Licencia:"
+    - text: GPL-2.0+ / EUPL-1.1
+  - separator [ref=f2e8]
+  - heading [level=2] [ref=f2e9]:
+    - text: Prueba de protocolo
+    - code [ref=f2e10]: afirma://
+  - paragraph [ref=f2e11]:
+    - text: Este botón comprueba que el SO asocia
+    - code [ref=f2e12]: x-scheme-handler/afirma
+    - text: al cliente instalado.
+  - button "Abrir Autofirma (afirma://)" [ref=f2e13]
+  - status
+  - separator [ref=f2e14]
+  - heading "Descargas por plataforma" [level=2] [ref=f2e15]
+  - generic [ref=f2e16]:
+    - heading "Linux — DEB (Debian, Ubuntu, derivados)" [level=3] [ref=f2e17]
+    - paragraph [ref=f2e18]:
+      - link "autofirma-2026_1.9.1-autofirma2026.0_all.deb" [ref=f2e19] [cursor=pointer]:
+        - /url: https://github.com/Alexendros/clienteafirma/releases/latest/download/autofirma-2026_1.9.1-autofirma2026.0_all.deb
+    - paragraph [ref=f2e20]: "SHA256: —"
+    - paragraph [ref=f2e21]:
+      - link "Firma GPG (.asc)" [ref=f2e22] [cursor=pointer]:
+        - /url: https://github.com/Alexendros/clienteafirma/releases/latest/download/autofirma-2026_1.9.1-autofirma2026.0_all.deb.asc
+      - text: "|"
+      - link "SHA256SUMS" [ref=f2e23] [cursor=pointer]:
+        - /url: https://github.com/Alexendros/clienteafirma/releases/latest/download/SHA256SUMS
+      - text: "|"
+      - link "SHA256SUMS.asc" [ref=f2e24] [cursor=pointer]:
+        - /url: https://github.com/Alexendros/clienteafirma/releases/latest/download/SHA256SUMS.asc
+  - generic [ref=f2e25]:
+    - heading "Linux — RPM (Fedora, RHEL, openSUSE, derivados)" [level=3] [ref=f2e26]
+    - paragraph [ref=f2e27]:
+      - link "autofirma-2026-1.9.1-1.x86_64.rpm" [ref=f2e28] [cursor=pointer]:
+        - /url: https://github.com/Alexendros/clienteafirma/releases/latest/download/autofirma-2026-1.9.1-1.x86_64.rpm
+    - paragraph [ref=f2e29]: "SHA256: —"
+    - paragraph [ref=f2e30]:
+      - link "Firma GPG (.asc)" [ref=f2e31] [cursor=pointer]:
+        - /url: https://github.com/Alexendros/clienteafirma/releases/latest/download/autofirma-2026-1.9.1-1.x86_64.rpm.asc
+      - text: "|"
+      - link "SHA256SUMS" [ref=f2e32] [cursor=pointer]:
+        - /url: https://github.com/Alexendros/clienteafirma/releases/latest/download/SHA256SUMS
+      - text: "|"
+      - link "SHA256SUMS.asc" [ref=f2e33] [cursor=pointer]:
+        - /url: https://github.com/Alexendros/clienteafirma/releases/latest/download/SHA256SUMS.asc
+  - generic [ref=f2e34]:
+    - heading "Linux — AppImage (universal, sin instalar)" [level=3] [ref=f2e35]
+    - paragraph [ref=f2e36]:
+      - link "Autofirma-1.9.1-autofirma2026.0-x86_64.AppImage" [ref=f2e37] [cursor=pointer]:
+        - /url: https://github.com/Alexendros/clienteafirma/releases/latest/download/Autofirma-1.9.1-autofirma2026.0-x86_64.AppImage
+    - paragraph [ref=f2e38]: "SHA256: —"
+    - paragraph [ref=f2e39]:
+      - link "Firma GPG (.asc)" [ref=f2e40] [cursor=pointer]:
+        - /url: https://github.com/Alexendros/clienteafirma/releases/latest/download/Autofirma-1.9.1-autofirma2026.0-x86_64.AppImage.asc
+      - text: "|"
+      - link "SHA256SUMS" [ref=f2e41] [cursor=pointer]:
+        - /url: https://github.com/Alexendros/clienteafirma/releases/latest/download/SHA256SUMS
+      - text: "|"
+      - link "SHA256SUMS.asc" [ref=f2e42] [cursor=pointer]:
+        - /url: https://github.com/Alexendros/clienteafirma/releases/latest/download/SHA256SUMS.asc
+  - generic [ref=f2e43]:
+    - heading "Linux — Flatpak (próximamente)" [level=3] [ref=f2e44]
+    - paragraph [ref=f2e45]:
+      - text: En desarrollo. Publicación prevista en
+      - link "Flathub" [ref=f2e46] [cursor=pointer]:
+        - /url: https://flathub.org
+      - text: .
+  - generic [ref=f2e47]:
+    - heading "Multiplataforma — JAR (requiere Java 8+)" [level=3] [ref=f2e48]
+    - paragraph [ref=f2e49]:
+      - link "autofirma-1.9.1-autofirma2026.0.jar" [ref=f2e50] [cursor=pointer]:
+        - /url: https://github.com/Alexendros/clienteafirma/releases/latest/download/autofirma-1.9.1-autofirma2026.0.jar
+    - paragraph [ref=f2e51]: "SHA256: —"
+    - paragraph [ref=f2e52]:
+      - link "Firma GPG (.asc)" [ref=f2e53] [cursor=pointer]:
+        - /url: https://github.com/Alexendros/clienteafirma/releases/latest/download/autofirma-1.9.1-autofirma2026.0.jar.asc
+      - text: "|"
+      - link "SHA256SUMS" [ref=f2e54] [cursor=pointer]:
+        - /url: https://github.com/Alexendros/clienteafirma/releases/latest/download/SHA256SUMS
+      - text: "|"
+      - link "SHA256SUMS.asc" [ref=f2e55] [cursor=pointer]:
+        - /url: https://github.com/Alexendros/clienteafirma/releases/latest/download/SHA256SUMS.asc
+  - separator [ref=f2e56]
+  - heading "Cómo verificar la integridad" [level=2] [ref=f2e57]
+  - code [ref=f2e59]: "# 1. Importar clave pública del mantenedor gpg --import mantenedor.pub # 2. Verificar firma GPG de un artefacto (ej. DEB) gpg --verify autofirma-2026_1.9.1-autofirma2026.0_all.deb.asc autofirma-2026_1.9.1-autofirma2026.0_all.deb # 3. Verificar checksum SHA256 sha256sum -c SHA256SUMS"
+  - heading "Compilar tú mismo" [level=2] [ref=f2e60]
+  - code [ref=f2e62]: git clone https://github.com/Alexendros/clienteafirma.git cd clienteafirma bash scripts/mvp.sh
+  - paragraph [ref=f2e63]:
+    - text: Ver
+    - link "BASELINE.txt" [ref=f2e64] [cursor=pointer]:
+      - /url: docs/BASELINE.txt
+    - text: para el pin de sincronización con upstream CTT.
+  - separator [ref=f2e65]
+  - heading "Firma por CLI (Firefox / Chromium sin handler)" [level=2] [ref=f2e66]
+  - generic [ref=f2e67]: autofirma sign -i documento.pdf -o documento-firmado.pdf \ -store pkcs12:/ruta/cert.p12 -password *** -alias "alias" -format pades
+  - contentinfo [ref=f2e68]:
+    - paragraph [ref=f2e69]:
+      - text: "Repositorio:"
+      - link "Alexendros/clienteafirma" [ref=f2e70] [cursor=pointer]:
+        - /url: https://github.com/Alexendros/clienteafirma
+      - text: "→ destino:"
+      - link "Soluciones-Alexendros/clienteafirma-alexendros" [ref=f2e71] [cursor=pointer]:
+        - /url: https://github.com/Soluciones-Alexendros/clienteafirma-alexendros
+    - paragraph [ref=f2e72]: "No sustituye a los servicios de validación del Estado: @firma, VALIDe, Cl@ve, Port@firmas, TS@."

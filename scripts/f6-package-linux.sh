@@ -2,7 +2,7 @@
 # F6 — Empaqueta .deb / staging RPM con registro afirma://
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-VER="${1:-1.9.1-autofirma2026.0}"
+VER="${1:-1.9.1-autofirma-alexendros}"
 JAR="$ROOT/afirma-simple/target/autofirma.jar"
 test -f "$JAR"
 
