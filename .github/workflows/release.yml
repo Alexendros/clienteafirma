@@ -96,13 +96,24 @@ jobs:
           - AppImage (universal Linux)
           - Flatpak (cuando esté disponible)
           - Checksums SHA256 para cada artefacto
-          ${{ secrets.GPG_PRIVATE_KEY != '' && '- Firmas GPG (`.asc`) para cada artefacto' || '' }}
+          EOF
+          if [ "${{ secrets.GPG_PRIVATE_KEY }}" != "" ]; then
+            echo "- Firmas GPG (`.asc`) para cada artefacto" >> release-notes.md
+          fi
+          cat >> release-notes.md << 'EOF'
 
           ### Verificación
           ```bash
           # Verificar checksum
           sha256sum -c SHA256SUMS
-          ${{ secrets.GPG_PRIVATE_KEY != '' && '# Verificar firma GPG\ngpg --verify autofirma-${{ github.ref_name }}.jar.asc autofirma-${{ github.ref_name }}.jar' || '' }}
+          EOF
+          if [ "${{ secrets.GPG_PRIVATE_KEY }}" != "" ]; then
+            cat >> release-notes.md << 'EOF'
+          # Verificar firma GPG
+          gpg --verify autofirma-${{ github.ref_name }}.jar.asc autofirma-${{ github.ref_name }}.jar
+          EOF
+          fi
+          cat >> release-notes.md << 'EOF'
           ```
 
           ### Cambios
@@ -118,20 +129,13 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: Autofirma ${{ github.ref_name }}
           body_path: release-notes.md
-          files: release-artifacts/*
+          files: |
+            release-artifacts/*
+            release-artifacts/*.asc
+            release-artifacts/SHA256SUMS
+            release-artifacts/SHA256SUMS.asc
           draft: false
           prerelease: ${{ contains(github.ref_name, '-rc') || contains(github.ref_name, '-beta') || contains(github.ref_name, '-alpha') }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload GPG signatures (if available)
-        if: ${{ secrets.GPG_PRIVATE_KEY != '' }}
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ github.ref_name }}
-          files: |
-            release-artifacts/*.asc
-            release-artifacts/SHA256SUMS.asc
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
