@@ -43,10 +43,54 @@ gui_requires = pytest.mark.skipif(
     reason="dogtail or AT-SPI not available"
 )
 
+
+class TestAccessibilityCodeVerification:
+    """Verify accessibility code is present without running GUI"""
+
+    def test_certificate_selection_accessible_names(self):
+        """Verify CertificateSelectionPanel has accessible names"""
+        cert_panel = REPO_ROOT / "afirma-ui-core-jse-keystores/src/main/java/es/gob/afirma/ui/core/jse/certificateselection/CertificateSelectionPanel.java"
+        content = cert_panel.read_text()
+
+        # Check for accessible names on cert list
+        assert 'Lista de certificados' in content
+        assert 'Seleccione el certificado' in content
+        assert 'AccessibleName' in content
+        assert 'AccessibleDescription' in content
+
+        # Check openButton has accessible name
+        assert 'UtilToolBar.2' in content
+        assert 'openButton.getAccessibleContext().setAccessibleName' in content
+
+    def test_pin_field_accessible_name(self):
+        """Verify PIN field has accessible name in JSEUIManager"""
+        jseuim_path = REPO_ROOT / "afirma-ui-core-jse/src/main/java/es/gob/afirma/ui/core/jse/JSEUIManager.java"
+        content = jseuim_path.read_text()
+
+        # Check pwd field has accessible name set to label text
+        assert 'pwd.getAccessibleContext().setAccessibleName(lbText.getText())' in content
+        assert 'panel.getAccessibleContext().setAccessibleDescription(lbText.getText())' in content
+
+    def test_confirm_dialog_accessible_names(self):
+        """Verify ConfirmSignatureDialog has accessible names"""
+        confirm_path = REPO_ROOT / "afirma-simple/src/main/java/es/gob/afirma/standalone/ui/ConfirmSignatureDialog.java"
+        content = confirm_path.read_text()
+
+        # Check dialog has accessible name and description
+        assert 'dialog.getAccessibleContext().setAccessibleName' in content
+        assert 'dialog.getAccessibleContext().setAccessibleDescription' in content
+
+        # Check checkbox has accessible name
+        assert 'confirmCb.getAccessibleContext().setAccessibleName' in content
+
+        # Check panel has accessible description
+        assert 'panel.getAccessibleContext().setAccessibleDescription' in content
+
+
 @gui_requires
 class TestAutofirmaAccessibility:
     """Test accessibility of 3 signing flows with Orca"""
-    
+
     @classmethod
     def setup_class(cls):
         """Setup test environment"""
@@ -61,19 +105,19 @@ class TestAutofirmaAccessibility:
                 if p.exists():
                     cls.jar_path = p
                     break
-        
+
         if not cls.jar_path.exists():
             pytest.skip(f"Autofirma JAR not found at {cls.jar_path}")
-        
+
         # Start Xvfb if not already running
         cls._start_xvfb()
-        
+
         # Start Orca
         cls._start_orca()
-        
+
         # Give time for services to start
         time.sleep(3)
-    
+
     @classmethod
     def _start_xvfb(cls):
         """Start Xvfb virtual display"""
@@ -82,7 +126,7 @@ class TestAutofirmaAccessibility:
         ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         os.environ['DISPLAY'] = ':99'
         time.sleep(1)
-    
+
     @classmethod
     def _start_orca(cls):
         """Start Orca screen reader"""
@@ -93,7 +137,7 @@ class TestAutofirmaAccessibility:
             stderr=subprocess.PIPE
         )
         time.sleep(2)
-    
+
     @classmethod
     def teardown_class(cls):
         """Cleanup"""
@@ -103,7 +147,7 @@ class TestAutofirmaAccessibility:
         if hasattr(cls, 'xvfb_proc') and cls.xvfb_proc:
             cls.xvfb_proc.terminate()
             cls.xvfb_proc.wait(timeout=5)
-    
+
     def _launch_autofirma(self):
         """Launch Autofirma and return the application object"""
         # Launch Autofirma JAR
@@ -113,7 +157,7 @@ class TestAutofirmaAccessibility:
             stderr=subprocess.PIPE
         )
         time.sleep(5)  # Wait for app to start
-        
+
         # Get the application via AT-SPI
         desktop = dogtail.tree.root
         app = None
@@ -122,10 +166,10 @@ class TestAutofirmaAccessibility:
                 app = app_candidate
                 break
         return app
-    
+
     def test_01_certificate_selection_flow(self):
         """Test Flow 1: Certificate Selection Dialog
-        
+
         Expected:
         - Tab enters the list
         - Orca announces "Lista de certificados"
@@ -134,25 +178,25 @@ class TestAutofirmaAccessibility:
         """
         app = self._launch_autofirma()
         assert app is not None, "Autofirma application not found"
-        
+
         # Find certificate selection dialog
         cert_dialog = None
         for child in dogtail.tree.root.children:
             if 'certificat' in child.name.lower() or 'certificado' in child.name.lower():
                 cert_dialog = child
                 break
-        
+
         # If no dialog yet, we might need to trigger it
         # For now, just verify the app launched
         assert True, "Autofirma launched successfully"
-        
+
         # Cleanup
         if hasattr(self, 'app_proc'):
             self.app_proc.terminate()
-    
+
     def test_02_pin_entry_flow(self):
         """Test Flow 2: PIN Entry Dialog
-        
+
         Expected:
         - Focus on PIN field
         - Orca announces prompt text
@@ -160,20 +204,20 @@ class TestAutofirmaAccessibility:
         """
         app = self._launch_autofirma()
         assert app is not None
-        
+
         # Look for PIN dialog
         # The PIN dialog should have accessible name/description set
         time.sleep(2)
-        
+
         # Cleanup
         if hasattr(self, 'app_proc'):
             self.app_proc.terminate()
-        
+
         assert True, "PIN flow test structure ready"
-    
+
     def test_03_confirm_signature_flow(self):
         """Test Flow 3: Confirm Signature Dialog
-        
+
         Expected:
         - Orca announces dialog title
         - Checkbox announced with name
@@ -181,20 +225,20 @@ class TestAutofirmaAccessibility:
         """
         app = self._launch_autofirma()
         assert app is not None
-        
+
         time.sleep(2)
-        
+
         # Cleanup
         if hasattr(self, 'app_proc'):
             self.app_proc.terminate()
-        
+
         assert True, "Confirm signature flow test structure ready"
-    
+
     def test_accessible_names_exist(self):
         """Verify accessible names are set on key UI elements"""
         # This test verifies the accessible names exist in the code
         # by checking the compiled classes
-        
+
         # Check CertificateSelectionPanel has accessible names
         cert_panel_path = Path("/home/alexendros/Aplicaciones/Fuentes/clienteafirma-alexendros/afirma-ui-core-jkeystores/src/main/java/es/gob/afirma/ui/core/jkeystores/certificateselection/CertificateSelectionPanel.java")
         if cert_panel_path.exists():
@@ -202,63 +246,23 @@ class TestAutofirmaAccessibility:
             assert 'Lista de certificados' in content
             assert 'AccessibleName' in content
             assert 'AccessibleDescription' in content
-        
+            assert 'AccessibleName' in content
+            assert 'AccessibleDescription' in content
+
         # Check JSEUIManager has PIN field accessible name
         jseuim_path = Path("/home/alexendros/Aplicaciones/Fuentes/clienteafirma-alexendros/afirma-ui-core-jse/src/main/java/es/gob/afirma/ui/core/jse/JSEUIManager.java")
         if jseuim_path.exists():
             content = jseuim_path.read_text()
             assert 'setAccessibleName' in content
             assert 'lbText.getText()' in content
-        
+
         # Check ConfirmSignatureDialog has accessible names
         confirm_path = Path("/home/alexendros/Aplicaciones/Fuentes/clienteafirma-alexendros/afirma-simple/src/main/java/es/gob/afirma/standalone/ui/ConfirmSignatureDialog.java")
         if confirm_path.exists():
             content = confirm_path.read_text()
             assert 'setAccessibleName' in content
             assert 'AccessibleDescription' in content
-
-
-class TestAccessibilityCodeVerification:
-    """Verify accessibility code is present without running GUI"""
-    
-def test_certificate_selection_accessible_names(self):
-        """Verify CertificateSelectionPanel has accessible names"""
-        cert_panel = REPO_ROOT / "afirma-ui-core-jse-keystores/src/main/java/es/gob/afirma/ui/core/jse/certificateselection/CertificateSelectionPanel.java"
-        content = cert_panel.read_text()
-        
-        # Check for accessible names on cert list
-        assert 'Lista de certificados' in content
-        assert 'Seleccione el certificado' in content
-        assert 'AccessibleName' in content
-        assert 'AccessibleDescription' in content
-        
-        # Check openButton has accessible name
-        assert 'UtilToolBar.2' in content
-        assert 'openButton.getAccessibleContext().setAccessibleName' in content
-    
-    def test_pin_field_accessible_name(self):
-        """Verify PIN field has accessible name in JSEUIManager"""
-        jseuim_path = REPO_ROOT / "afirma-ui-core-jse/src/main/java/es/gob/afirma/ui/core/jse/JSEUIManager.java"
-        content = jseuim_path.read_text()
-        
-        # Check pwd field has accessible name set to label text
-        assert 'pwd.getAccessibleContext().setAccessibleName(lbText.getText())' in content
-        assert 'panel.getAccessibleContext().setAccessibleDescription(lbText.getText())' in content
-    
-    def test_confirm_dialog_accessible_names(self):
-        """Verify ConfirmSignatureDialog has accessible names"""
-        confirm_path = REPO_ROOT / "afirma-simple/src/main/java/es/gob/afirma/standalone/ui/ConfirmSignatureDialog.java"
-        content = confirm_path.read_text()
-        
-        # Check dialog has accessible name and description
-        assert 'dialog.getAccessibleContext().setAccessibleName' in content
-        assert 'dialog.getAccessibleContext().setAccessibleDescription' in content
-        
-        # Check checkbox has accessible name
-        assert 'confirmCb.getAccessibleContext().setAccessibleName' in content
-        
-        # Check panel has accessible description
-        assert 'panel.getAccessibleContext().setAccessibleDescription' in content
+            assert 'AccessibleDescription' in content
 
 
 if __name__ == '__main__':
