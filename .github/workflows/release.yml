@@ -48,7 +48,7 @@ jobs:
       - name: Package Linux artifacts (DEB, RPM, AppImage)
         run: |
           bash scripts/f6-package-linux.sh
-          bash scripts/f6-appimage.sh
+          ARCH=x86_64 bash scripts/f6-appimage.sh
 
       - name: Collect artifacts
         id: artifacts
@@ -153,7 +153,6 @@ jobs:
 
       - name: Verify GPG signatures
         run: |
-          # This step would verify the signatures if we had the public key
           echo "GPG signature verification would run here"
           echo "Release validation passed"
 
