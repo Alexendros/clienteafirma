@@ -118,13 +118,20 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: Autofirma ${{ github.ref_name }}
           body_path: release-notes.md
-          files: |
-            release-artifacts/*
-            ${{ secrets.GPG_PRIVATE_KEY != '' && 'release-artifacts/*.asc' || '' }}
-            release-artifacts/SHA256SUMS
-            ${{ secrets.GPG_PRIVATE_KEY != '' && 'release-artifacts/SHA256SUMS.asc' || '' }}
+          files: release-artifacts/*
           draft: false
           prerelease: ${{ contains(github.ref_name, '-rc') || contains(github.ref_name, '-beta') || contains(github.ref_name, '-alpha') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload GPG signatures (if available)
+        if: ${{ secrets.GPG_PRIVATE_KEY != '' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: |
+            release-artifacts/*.asc
+            release-artifacts/SHA256SUMS.asc
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
