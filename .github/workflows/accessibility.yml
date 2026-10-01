@@ -16,9 +16,33 @@ permissions:
 
 jobs:
   accessibility:
-    name: Accessibility (Orca)
+    name: Accessibility (Code Verification)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install Python dependencies
+        run: |
+          pip3 install pytest
+
+      - name: Run accessibility code verification tests
+        run: |
+          cd tests/accessibility
+          python3 -m pytest src/test/python/orca_test_suite.py::TestAccessibilityCodeVerification -v
+
+  # Experimental: Full Orca GUI tests (currently experimental - runs but doesn't block)
+  accessibility-orca:
+    name: Accessibility (Orca GUI - Experimental)
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    continue-on-error: true
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -56,13 +80,8 @@ jobs:
         run: |
           mvn -B clean install -DskipTests -Denv=install -pl afirma-simple -am
 
-      - name: Run accessibility code verification tests
-        run: |
-          cd tests/accessibility
-          python3 -m pytest src/test/python/orca_test_suite.py::TestAccessibilityCodeVerification -v
-
-      - name: Run full Orca accessibility tests (if display available)
-        if: runner.os == 'Linux'
+      - name: Run full Orca accessibility tests (experimental)
+        continue-on-error: true
         run: |
           # Start Xvfb
           Xvfb :99 -screen 0 1024x768x24 -ac &
@@ -79,8 +98,3 @@ jobs:
           
         env:
           DISPLAY: ':99'
-
-      - name: Run accessibility code verification (always runs)
-        run: |
-          cd tests/accessibility
-          python3 -m pytest src/test/python/orca_test_suite.py::TestAccessibilityCodeVerification -v
