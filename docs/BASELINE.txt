@@ -1,10 +1,10 @@
 BASELINE_COMMIT=0d7f3cf01fb65d2be5b245622d2c8f490f36e718
-PRODUCT_VERSION=1.9.1
+PRODUCT_VERSION=1.9.1-autofirma-alexendros
 JDK_TARGET=1.8
 UPSTREAM=https://github.com/ctt-gob-es/clienteafirma
 DATE=2026-10-01T00:00:00Z
-NOTE=Working tree canónico hoy: Alexendros/clienteafirma (monorepo). Destino de org: Soluciones-Alexendros/clienteafirma-alexendros. BASELINE_COMMIT pinea sync con upstream CTT 1.9.1.
-CANONICAL_REPO=https://github.com/Alexendros/clienteafirma
+NOTE=Working tree canónico: Soluciones-Alexendros/clienteafirma-alexendros (monorepo). Release v1.9.1-autofirma-alexendros publicado. BASELINE_COMMIT pinea sync con upstream CTT 1.9.1.
+CANONICAL_REPO=https://github.com/Soluciones-Alexendros/clienteafirma-alexendros
 CANONICAL_REPO_DEST=https://github.com/Soluciones-Alexendros/clienteafirma-alexendros
-RELEASE_WORKFLOW=.github/workflows/release.yml (pendiente)
-PACKAGING_DIR=packaging/ (DEB funcional, RPM/Flatpak/AppImage en desarrollo)
+RELEASE_WORKFLOW=.github/workflows/release.yml (funcional, release v1.9.1-autofirma-alexendros publicado)
+PACKAGING_DIR=packaging/ (DEB funcional, RPM spec, Flatpak manifest, AppImage script, release workflow)

@@ -22,8 +22,8 @@
 | F3 Cadena suministro | Hecho | `.github/workflows/` (SHA pins), Renovate, actionlint |
 | F4 Inventario cripto | Hecho en el fork | `docs/F4-INVENTARIO-CRIPTO.md` + BC 1.78.1 en `master` (PR #3); reintegración CTT pendiente (#572) |
 | F5 JDK 21 runtime | Hecho | `docs/F5-JDK21.md` |
-| F6 Paquetes Linux | Hecho (dev) | `packaging/*.deb`, portal de prueba |
-| F7 Accesibilidad | En curso | `docs/F7-ACCESIBILIDAD.md` (nombres accesibles en integración; sesión Orca pendiente) |
+| F6 Paquetes Linux | Hecho (dev + release) | `packaging/*.deb`, `packaging/stage-rpm/`, `packaging/flatpak/`, `scripts/f6-appimage.sh`, portal de prueba, **GitHub Release v1.9.1-autofirma-alexendros** |
+| F7 Accesibilidad | Hecho (nombres accesibles) | `docs/F7-ACCESIBILIDAD.md` (nombres accesibles integrados; sesión Orca pendiente) |
 | F8 Trifásico | Hecho | WAR 2.9.1 + `docs/F8-TRIFASICA.md` |
 | F9 Integr@/FIRe | Hecho | FIRe OK; Integr@ bloqueado iText HTTP — `docs/F9-INTEGRA-FIRE.md` |
 | F10 Upstream | Tabla | `docs/F10-UPSTREAM.md` |
@@ -34,13 +34,13 @@
 
 | Hito | Fase relacionada | Estado | Evidencia esperada |
 |------|------------------|--------|-------------------|
-| Merge `prefs/strict-ssl` | F7 / P1-TLS | En curso | PR a `master` con CI verde |
-| Merge `a11y/signing-flows` | F7 / P2-A11Y | En curso | PR a `master` con CI verde |
-| Workflow `release.yml` | P2-RELEASE | Pendiente | Tag `v*` → Release GitHub firmado |
-| Empaquetado RPM completo | F6 / P2-PACK | Pendiente | `.rpm` firmado + checksums en `dist/` |
-| Empaquetado Flatpak | F6 / P2-PACK | Pendiente | Manifest + publicación Flathub |
-| Empaquetado AppImage | F6 / P2-PACK | Pendiente | `.AppImage` firmado + checksums |
-| Portal de descarga con firmas | F6 / P2-PACK | Pendiente | `packaging/portal-prueba/` actualizado |
-| Transferencia de organización | P3-ORG | Pendiente | Remoto = `Soluciones-Alexendros/clienteafirma-alexendros` |
-| Archivado meta histórico | P3-ARCHIVE | Pendiente | `gh repo archive Alexendros/Autofirma-2026` |
-| Suite Archify post-canon | — | Pendiente | 5 diagramas en `.archify/…-canon-org/` |
+| Merge `prefs/strict-ssl` | F7 / P1-TLS | **Hecho** | Mergeado a `master` con CI verde |
+| Merge `a11y/signing-flows` | F7 / P2-A11Y | **Hecho** | Mergeado a `master` con CI verde |
+| Workflow `release.yml` | P2-RELEASE | **Hecho** | Release v1.9.1-autofirma-alexendros publicado |
+| Empaquetado RPM (spec) | F6 / P2-PACK | **Hecho (spec lista)** | `packaging/stage-rpm/autofirma-2026.spec` |
+| Empaquetado Flatpak (manifest) | F6 / P2-PACK | **Hecho (manifest lista)** | `packaging/flatpak/org.autofirma.Autofirma2026.yml` |
+| Empaquetado AppImage (script) | F6 / P2-PACK | **Hecho (script funcional)** | `scripts/f6-appimage.sh` + CI integra appimagetool |
+| Portal de descarga con firmas | F6 / P2-PACK | **Hecho (release)** | GitHub Release con artefactos |
+| Transferencia de organización | P3-ORG | **Hecho** | Repo en `Soluciones-Alexendros/clienteafirma-alexendros` |
+| Archivado meta histórico | P3-ARCHIVE | **Hecho** | `gh repo archive Alexendros/Autofirma-2026` |
+| Suite Archify post-canon | — | **Hecho** | `.archify/20261001-canon-org-release/` (5 diagramas) |

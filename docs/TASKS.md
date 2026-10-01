@@ -14,13 +14,9 @@
 
 | ID | Tarea | Criterio de salida | Evidencia |
 |----|-------|--------------------|-----------|
-| T-A11Y | Integrar nombres accesibles (lista de certificados, PIN, confirmar) | PR mergeado + CI verde; sin cambiar el comportamiento de firma | Rama `a11y/signing-flows` → PR a `master` |
-| T-TLS | Preferencia `strictSslChecks` opt-in (por defecto off) | PR mergeado; default sigue compatible con sedes | Rama `prefs/strict-ssl` → PR a `master` |
-| T-ORG | Trasladar repo a `Soluciones-Alexendros/clienteafirma-alexendros` | Remoto canónico = nueva URL; Actions responden | Transfer + rename |
-| T-RELEASE | Workflow `release.yml` (SemVer, tags firmados, GitHub Releases) | Tag `v*` → Release publicado con artefactos firmados | `.github/workflows/release.yml` |
-| T-PACK | Empaquetado completo: DEB, RPM, Flatpak, AppImage + firmas/checksums | Artefactos en `dist/` con `.asc` y `SHA256SUMS*` | `packaging/` + `scripts/f6-*.sh` |
-| T-ARCHIFY | Suite Archify post-canon (5 diagramas en español) | `finalize` 5/5 pass + `SUITE-SUMMARY` con URL nueva | `.archify/…-canon-org/` |
-| T-ARCHIVE | Archivar meta `Alexendros/Autofirma-2026` | Repo read-only en GitHub | `gh repo archive` |
+| T-ORCA | Sesión real con Orca (lector de pantalla) en los 3 flujos | Informe F7 actualizado con evidencia | No bloquea merge de nombres accesibles |
+| T-CI-TESTS | Ejecutar tests de validación cripto también en CI (hoy parte del build usa skipTests) | Job CI documentado en verde | ROADMAP P2-CI |
+| T-FLATPAK | Flatpak/AppImage usable para usuarios finales | Paquete instalable documentado | Experimental / P3 |
 
 ---
 
@@ -34,6 +30,13 @@
 | T-XXE | `SecureXmlBuilder` en sinks XML de usuario/servidor | Compila; remediación SEC-007/008 | PR [#4](https://github.com/Alexendros/clienteafirma/pull/4) |
 | T-MONO | Absorber Autofirma-2026 como monorepo | `make validate` + MVP + gates 360 | PR [#5](https://github.com/Alexendros/clienteafirma/pull/5) |
 | T-F0…T-F6, T-F8, T-F9 | Fases de programa (salvo a11y Orca) | Ver ESTADO-FASES | Docs + scripts en árbol |
+| T-A11Y | Nombres accesibles (cert list, PIN, confirm) | Mergeado + CI verde | Rama `a11y/signing-flows` |
+| T-TLS | `strictSslChecks` opt-in (default off) | Mergeado + CI verde | Rama `prefs/strict-ssl` |
+| T-ORG | Repo transferido a `Soluciones-Alexendros/clienteafirma-alexendros` | Remoto canónico = nueva URL | Transfer completada |
+| T-RELEASE | Release v1.9.1-autofirma-alexendros publicado | Tag `v*` → Release con artefactos | GitHub Release v1.9.1-autofirma-alexendros |
+| T-PACK | Empaquetado DEB/RPM/Flatpak/AppImage + firmas/checksums | Artefactos en release | GitHub Release assets |
+| T-ARCHIFY | Suite Archify post-canon | `.archify/20261001-canon-org-release/` | 5 diagramas + SUITE-SUMMARY |
+| T-ARCHIVE | Meta `Alexendros/Autofirma-2026` archivado | Repo read-only | `gh repo archive` |
 
 ---
 

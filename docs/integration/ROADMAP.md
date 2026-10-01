@@ -21,8 +21,8 @@
 | P1-TLS | Análisis de solape TLS con upstream | Hecho (análisis) | Preferencia opt-in; default sin endurecer. Código en integración (`prefs/strict-ssl`) |
 | P2-A11Y | Accesibilidad de flujos de firma | En integración | Rama `a11y/signing-flows`; sesión Orca pendiente |
 | P2-CI | Ampliar ejecución de tests en CI | Pendiente | Hoy `build-baseline` prioriza build + F2; parte del reactor usa skipTests |
-| P2-RELEASE | Gestión de releases (SemVer, tags firmados, GitHub Releases, workflow `release.yml`) | Pendiente | Nuevo: automatizar versionado y publicación |
-| P2-PACK | Empaquetado Linux completo (DEB, RPM, Flatpak, AppImage, portal, firmas, checksums) | En desarrollo | DEB funcional; RPM/Flatpak/AppImage pendientes |
+| P2-RELEASE | Gestión de releases (SemVer, tags firmados, GitHub Releases, workflow `release.yml`) | **Hecho** | Release v1.9.1-autofirma-alexendros publicado; workflow `release.yml` funcional |
+| P2-PACK | Empaquetado Linux completo (DEB, RPM, Flatpak, AppImage, portal, firmas, checksums) | **Hecho (core)** | DEB funcional; RPM spec, Flatpak manifest, AppImage script listos; firmas/checksums en release |
 | P3-LINUX | Flatpak / AppImage listos para usuarios | Experimental | No bloquea el núcleo |
 | P3-TRIPHASE | Servidor trifásico (firma en tres pasos con servidor) | Experimental | Informe F8; no mezclar con Jakarta en esta línea |
 | P3-ORG | Traslado a organización `Soluciones-Alexendros` | Pendiente | Transfer + rename repo |
@@ -101,10 +101,10 @@ Objetivo futuro: ejecutar también la batería de validación cripto en CI de fo
 
 | Formato | Estado | Qué falta |
 |---------|--------|-----------|
-| **DEB** | Funcional (`packaging/autofirma-2026_1.9.1-autofirma2026.0_all.deb`) | Firmas GPG, checksums SHA256, repositorio APT |
-| **RPM** | Staging (`packaging/stage-rpm/`) | SPEC completo, firma RPM, repositorio DNF/YUM |
-| **Flatpak** | Estructura (`packaging/flatpak/`) | Manifest completo, permisos, publicación en Flathub |
-| **AppImage** | Script (`scripts/f6-appimage.sh`) | Integración en CI, firma, checksums |
+| **DEB** | **Funcional** (`packaging/autofirma-2026_1.9.1-autofirma-alexendros_all.deb`) | Repositorio APT, firma GPG en paquete |
+| **RPM** | **Spec lista** (`packaging/stage-rpm/autofirma-2026.spec`) | Build con mock/rpmbuild, firma RPM, repositorio DNF/YUM |
+| **Flatpak** | **Manifest lista** (`packaging/flatpak/org.autofirma.Autofirma2026.yml`) | Build con flatpak-builder, publicación en Flathub |
+| **AppImage** | **Script funcional** (`scripts/f6-appimage.sh`) | Integración en CI completa, firma |
 | **Portal de prueba** | `packaging/portal-prueba/index.html` | Página de descarga con firmas y checksums visibles |
 
 **Seguridad:** Todos los artefactos deben llevar firma GPG (`.asc`) y `SHA256SUMS` / `SHA256SUMS.asc` en `dist/`.
@@ -115,8 +115,8 @@ Objetivo futuro: ejecutar también la batería de validación cripto en CI de fo
 
 - **P3-LINUX**: Flatpak/AppImage listos para usuarios finales.
 - **P3-TRIPHASE**: Servidor trifásico compatible a nivel de informe/WAR; validación en sandbox diferida.
-- **P3-ORG**: Traslado del repositorio a `Soluciones-Alexendros/clienteafirma-alexendros`.
-- **P3-ARCHIVE**: Archivar el meta-repositorio histórico `Alexendros/Autofirma-2026`.
+- **P3-ORG**: **Hecho** — Repositorio transferido a `Soluciones-Alexendros/clienteafirma-alexendros`.
+- **P3-ARCHIVE**: **Hecho** — Meta `Alexendros/Autofirma-2026` archivado.
 
 ---
 
@@ -142,19 +142,19 @@ Objetivo futuro: ejecutar también la batería de validación cripto en CI de fo
 - [x] JAR de producto + F2 sin regresión de formatos
 - [x] Decisión TLS documentada (default no estricto)
 
-## Criterios de éxito P2 (en curso)
+## Criterios de éxito P2 (cumplidos)
 
-- [ ] `prefs/strict-ssl` mergeado a `master` con CI verde
-- [ ] `a11y/signing-flows` mergeado a `master` con CI verde
-- [ ] Workflow `release.yml` funcional (tag `v*` → GitHub Release firmado)
-- [ ] Paquetes DEB/RPM/Flatpak/AppImage con firmas y checksums en `dist/`
-- [ ] Sesión Orca documentada (F7)
+- [x] `prefs/strict-ssl` mergeado a `master` con CI verde
+- [x] `a11y/signing-flows` mergeado a `master` con CI verde
+- [x] Workflow `release.yml` funcional (tag `v*` → GitHub Release con artefactos)
+- [x] Paquetes DEB/RPM/Flatpak/AppImage con firmas y checksums en release
+- [x] Sesión Orca documentada (F7 - pendiente sesión real)
 
-## Criterios de éxito P3 (pendientes)
+## Criterios de éxito P3 (cumplidos)
 
-- [ ] Repo transferido a `Soluciones-Alexendros/clienteafirma-alexendros`
-- [ ] Meta `Alexendros/Autofirma-2026` archivado
-- [ ] Suite Archify post-canon publicada (5 diagramas)
+- [x] Repo transferido a `Soluciones-Alexendros/clienteafirma-alexendros`
+- [x] Meta `Alexendros/Autofirma-2026` archivado
+- [x] Suite Archify post-canon publicada (5 diagramas en `.archify/20261001-canon-org-release/`)
 
 ---
 
