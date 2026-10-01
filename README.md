@@ -6,7 +6,7 @@
 - **Estructura:** Quiénes somos → comparativa → arranque rápido → construcción Maven → módulos.
 - **Contenido a integrar según contexto:** Conserva Java 8 + Maven y licencias GPL-2.0+ / EUPL-1.1 del CTT. No copies un README de SaaS.
 
-> **Canónico comunitario (hoy):** [Alexendros/clienteafirma](https://github.com/Alexendros/clienteafirma) — fork de [ctt-gob-es/clienteafirma](https://github.com/ctt-gob-es/clienteafirma) (Autofirma **1.9.1**) más el programa Autofirma-2026. **Destino de org:** `Soluciones-Alexendros/clienteafirma-alexendros` (traslado pendiente). **No sustituye** al cliente oficial del Estado ni a VALIDe, Cl@ve o la plataforma `@firma`.
+> **Canónico comunitario:** [Soluciones-Alexendros/clienteafirma-alexendros](https://github.com/Soluciones-Alexendros/clienteafirma-alexendros) — fork de [ctt-gob-es/clienteafirma](https://github.com/ctt-gob-es/clienteafirma) (Autofirma **1.9.1**) más el programa Autofirma-2026. **No sustituye** al cliente oficial del Estado ni a VALIDe, Cl@ve o la plataforma `@firma`.
 
 [![License: GPL-2.0+ OR EUPL-1.1](https://img.shields.io/badge/license-GPL--2.0%2B%20%7C%20EUPL--1.1-blue.svg)](LICENSE)
 [![Baseline](https://img.shields.io/badge/baseline-Autofirma%201.9.1-informational.svg)](docs/BASELINE.txt)
@@ -28,15 +28,27 @@ Este repositorio es un **fork comunitario**: mismo producto usable, más capas d
 
 ---
 
-## Fork comunitario vs Autofirma oficial (resumen)
+## Fork comunitario vs Autofirma oficial
 
-| | Oficial CTT | Este fork |
-|---|-------------|-----------|
-| Protocolo `afirma://` y formatos de firma | Sí | Sí (misma línea 1.9.x) |
-| Biblioteca criptográfica | SpongyCastle | BouncyCastle 1.78.1 |
-| Vectores de no-regresión (F2) y `mvp.sh` | No equivalentes en el repo | Sí |
-| CI comunitaria (`make validate`, gates 360º) | No | Sí |
-| Sustituye VALIDe / Cl@ve / `@firma` | — | **No** |
+Los números de esta tabla salen del POM de este árbol (`pom.xml`, versión `1.9.1`) y de la comprobación de empaquetado de esta rama. La tabla ampliada está en [docs/COMPARATIVA-FORK-CTT.md](docs/COMPARATIVA-FORK-CTT.md).
+
+| Dato | Oficial CTT (`ctt-gob-es/clienteafirma`) | Este fork (`Soluciones-Alexendros/clienteafirma-alexendros`) |
+|---|---|---|
+| Línea de producto | Autofirma 1.9.x | `1.9.1` (`clienteafirma.version`) |
+| Licencia | GPL-2.0-or-later / EUPL-1.1 | La misma |
+| JDK de compilación del cliente | 8 | 8 (`jdk.version=1.8`) |
+| Protocolo `afirma://` | Sí | Sí, el mismo |
+| Formatos que debe generar | CAdES, XAdES, PAdES, FacturaE, cofirma, contrafirma | Los mismos; la puerta local es `scripts/f2-regression.sh` |
+| Algoritmo de firma por defecto en código | El del upstream 1.9.1 | `SHA512withRSA` (`AOSignConstants.DEFAULT_SIGN_ALGO`) |
+| BouncyCastle declarado | SpongyCastle en el upstream de esta línea | `org.bouncycastle` **1.78.1** (`bcprov` / `bcpkix` / `bcutil`, `jdk18on`) |
+| SpongyCastle dentro del JAR sombreado | Presente en el upstream | Sigue entrando en el JAR de `mvn -Denv=install` como transitiva `com.madgag.spongycastle` **1.56.0.0** (lo arrastra iText empaquetado). No está eliminado del artefacto |
+| Clave de firma de instalador en Git | PFX y contraseña en el árbol upstream | Retirados de `HEAD`. Firma de instalador solo con `AFIRMA_SIGN_PFX` y `AFIRMA_SIGN_PASS` fuera del repo. Gate: `make security-material` |
+| Almacenes de test | En `src/test/resources` | Los mismos fixtures, con SHA-256 en `scripts/ci/crypto-material-allowlist.txt` |
+| TLS estricto por defecto | No | No. `strictSslChecks` sigue opt-in y **no** está en `master` |
+| Nombres accesibles (certificado, PIN, confirmar) | No en el upstream 1.9.1 | En `master` desde `8420011`. Falta la sesión con Orca |
+| CI que bloquea `master` | No equivalente | `quality`, `test`, `build`, `smoke` |
+| Release comunitario firmado | Instaladores del Estado | Aún no. No hay tag `v1.9.1-community.N` |
+| Sustituye VALIDe, Cl@ve o `@firma` | No | No |
 
 Tabla ampliada: [docs/COMPARATIVA-FORK-CTT.md](docs/COMPARATIVA-FORK-CTT.md).
 

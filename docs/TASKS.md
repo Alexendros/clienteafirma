@@ -6,7 +6,7 @@
 - **Estructura:** Bloques por prioridad y por fase F0–F10.
 - **Contenido a integrar según contexto:** Actualizar al cerrar PRs o fases. Complementa [ROADMAP](integration/ROADMAP.md) y [ESTADO-FASES](ESTADO-FASES.md).
 
-**Canónico:** [Soluciones-Alexendros/clienteafirma-alexendros](https://github.com/Soluciones-Alexendros/clienteafirma-alexendros) (traslado desde `Alexendros/clienteafirma`).
+**Canónico:** [Soluciones-Alexendros/clienteafirma-alexendros](https://github.com/Soluciones-Alexendros/clienteafirma-alexendros).
 
 ---
 
@@ -16,7 +16,7 @@
 |----|-------|--------------------|-----------|
 | T-A11Y | Integrar nombres accesibles (lista de certificados, PIN, confirmar) | PR mergeado + CI verde; sin cambiar el comportamiento de firma | Rama `a11y/signing-flows` → PR a `master` |
 | T-TLS | Preferencia `strictSslChecks` opt-in (por defecto off) | PR mergeado; default sigue compatible con sedes | Rama `prefs/strict-ssl` → PR a `master` |
-| T-ORG | Trasladar repo a `Soluciones-Alexendros/clienteafirma-alexendros` | Remoto canónico = nueva URL; Actions responden | Transfer + rename |
+| T-ORG | Trasladar repo a `Soluciones-Alexendros/clienteafirma-alexendros` | Remoto canónico = nueva URL | Hecho. El remoto de este clon ya es esa URL |
 | T-ARCHIFY | Suite Archify post-canon (5 diagramas en español) | `finalize` 5/5 pass + `SUITE-SUMMARY` con URL nueva | `.archify/…-canon-org/` |
 | T-ARCHIVE | Archivar meta `Alexendros/Autofirma-2026` | Repo read-only en GitHub | `gh repo archive` |
 

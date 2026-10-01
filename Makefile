@@ -4,7 +4,7 @@
 COMMUNITY_SCRIPTS := $(wildcard scripts/*.sh)
 
 .PHONY: help lint quality test test-community smoke build validate \
-	review360 review360-r2 remediation360
+	review360 review360-r2 remediation360 security-material
 
 help:
 	@printf '%s\n' \
@@ -17,7 +17,8 @@ help:
 	  'make validate          lint + quality + test + test-community + smoke' \
 	  'make review360         verify CODE-REVIEW-360 findings' \
 	  'make review360-r2      verify CODE-REVIEW-360-R2 findings' \
-	  'make remediation360    verify post-audit mitigations'
+	  'make remediation360    verify post-audit mitigations' \
+	  'make security-material detecta PFX operativos y contraseñas literales'
 
 lint:
 	bash scripts/ci/check-contract.sh
@@ -53,3 +54,7 @@ review360-r2:
 
 remediation360:
 	bash scripts/verify-remediation-360.sh
+
+security-material:
+	bash scripts/ci/test-detect-crypto-material.sh
+	bash scripts/ci/detect-crypto-material.sh

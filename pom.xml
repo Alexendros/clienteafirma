@@ -59,6 +59,9 @@
 
 		<!-- test-dependencies -->		
 		<junit.version>4.13.2</junit.version>
+
+		<!-- true salvo -Dafirma.code.sign.skip=false y almacén fuera de Git -->
+		<afirma.code.sign.skip>true</afirma.code.sign.skip>
 	</properties>
 
 	<dependencyManagement>
