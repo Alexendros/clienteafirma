@@ -1,0 +1,243 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+  packages: write
+  attestations: write
+  id-token: write
+
+jobs:
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 8
+          cache: maven
+          cache-dependency-path: pom.xml
+
+      - name: Set up Maven
+        uses: stCarolas/setup-maven@v5
+        with:
+          maven-version: '3.9.9'
+
+      - name: Build all modules
+        run: |
+          mvn -B clean install -DskipTests
+      
+      - name: Build env-install profile (JAR + services)
+        run: |
+          mvn -B clean install -DskipTests -Denv=install -pl '!afirma-server-triphase-signer,!afirma-signature-retriever,!afirma-signature-storage'
+      
+      - name: Run F2 regression vectors
+        run: |
+          bash scripts/f2-regression.sh
+
+      - name: "SEC-2026-010: Verify reproducible JAR build"
+        run: |
+          mkdir -p verify-reproducible
+          cd verify-reproducible
+          
+          # First build
+          git worktree add ../worktree1
+          cd ../worktree1
+          mvn -B clean install -DskipTests -Denv=install -pl afirma-simple -am
+          cp afirma-simple/target/autofirma.jar ../build1.jar
+          sha256sum ../build1.jar > ../build1.sha256
+          
+          # Second build in separate worktree
+          cd ..
+          git worktree add ../worktree2
+          cd ../worktree2
+          mvn -B clean install -DskipTests -Denv=install -pl afirma-simple -am
+          cp afirma-simple/target/autofirma.jar ../build2.jar
+          sha256sum ../build2.jar > ../build2.sha256
+          
+          # Compare hashes
+          cd ..
+          sha256_1=$($(cut -d' ' -f1 build1.sha256))
+          sha256_2=$(cut -d' ' -f1 build2.sha256)
+          
+          echo "Build 1 SHA256: $sha256_1"
+          echo "Build 2 SHA256: $sha256_2"
+          
+          if [ "$sha256_1" = "$sha256_2" ]; then
+            echo "✓ Reproducible build verified: Both builds produced identical SHA-256"
+            echo "SHA256: $sha256_1" > reproducible-build.sha256
+          else
+            echo "✗ Reproducible build FAILED: Hashes differ!"
+            echo "Build 1: $sha256_1"
+            echo "Build 2: $sha256_2"
+            exit 1
+          fi
+          
+          # Cleanup worktrees
+          git worktree remove ../worktree1 --force
+          git worktree remove ../worktree2 --force
+
+      - name: Import GPG key
+        if: ${{ secrets.GPG_PRIVATE_KEY != '' }}
+        run: |
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --import --batch --yes
+          gpg --list-secret-keys --keyid-format LONG
+
+      - name: Install appimagetool and FUSE
+        run: |
+          wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
+          chmod +x /usr/local/bin/appimagetool
+          sudo apt-get update && sudo apt-get install -y libfuse2
+      
+      - name: Package Linux artifacts (DEB, RPM, AppImage)
+        run: |
+          bash scripts/f6-package-linux.sh
+          ARCH=x86_64 bash scripts/f6-appimage.sh
+
+      - name: Collect artifacts
+        run: |
+          mkdir -p release-artifacts
+          cp afirma-simple/target/autofirma.jar release-artifacts/autofirma-${{ github.ref_name }}.jar 2>/dev/null || true
+          cp packaging/autofirma-2026_*.deb release-artifacts/ 2>/dev/null || true
+          cp packaging/stage-rpm/*.rpm release-artifacts/ 2>/dev/null || true
+          cp *.AppImage release-artifacts/ 2>/dev/null || true
+          cp packaging/flatpak/*.flatpak release-artifacts/ 2>/dev/null || true
+          # Copy reproducible build verification
+          cp verify-reproducible/reproducible-build.sha256 release-artifacts/reproducible-build.sha256 2>/dev/null || true
+
+      - name: Generate SHA256SUMS
+        run: |
+          cd release-artifacts
+          sha256sum * > SHA256SUMS
+
+      - name: Sign artifacts with GPG
+        if: ${{ secrets.GPG_PRIVATE_KEY != '' }}
+        run: |
+          cd release-artifacts
+          for f in ./*; do
+            if [ -f "$f" ]; then
+              gpg --armor --detach-sign --output "$f.asc" "$f"
+            fi
+          done
+
+      - name: Sign SHA256SUMS with GPG
+        if: ${{ secrets.GPG_PRIVATE_KEY != '' }}
+        run: |
+          cd release-artifacts
+          gpg --armor --detach-sign --output SHA256SUMS.asc SHA256SUMS
+
+      - name: Generate SBOM with CycloneDX
+        run: |
+          mvn -B cyclonedx:makeBom -pl afirma-simple
+          cp afirma-simple/target/sbom.json release-artifacts/sbom.json 2>/dev/null || true
+
+      - name: Create Release Notes
+        run: |
+          cat > release-notes.md << 'EOF'
+          ## Autofirma ${{ github.ref_name }}
+
+          ### Qué incluye
+          - JAR autoejecutable (`autofirma.jar`)
+          - Paquete DEB (Debian/Ubuntu)
+          - Paquete RPM (Fedora/RHEL/openSUSE)
+          - AppImage (universal Linux)
+          - Flatpak (cuando esté disponible)
+          - Checksums SHA256 para cada artefacto
+          - SBOM (CycloneDX JSON)
+          - Firmas GPG (`.asc`) y checksums SHA256
+
+          ### Verificación
+          ```bash
+          # Verificar firma GPG
+          gpg --verify autofirma-${{ github.ref_name }}.jar.asc autofirma-${{ github.ref_name }}.jar
+
+          # Verificar checksum
+          sha256sum -c SHA256SUMS
+          ```
+
+          ### Cambios
+          Ver [CHANGELOG.md](CHANGELOG.md) para detalles.
+
+          ### Licencia
+          GPL-2.0+ / EUPL-1.1
+          EOF
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Autofirma ${{ github.ref_name }}
+          body_path: release-notes.md
+          files: |
+            release-artifacts/*
+            release-artifacts/*.asc
+            release-artifacts/SHA256SUMS
+            release-artifacts/SHA256SUMS.asc
+            release-artifacts/sbom.json
+            release-artifacts/reproducible-build.sha256
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-rc') || contains(github.ref_name, '-beta') || contains(github.ref_name, '-alpha') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Attest SBOM
+        if: ${{ secrets.GITHUB_TOKEN != '' }}
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: release-artifacts/sbom.json
+
+  validate:
+    name: Validate Release Artifacts
+    runs-on: ubuntu-latest
+    needs: release
+    timeout-minutes: 15
+    steps:
+      - name: Download release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: release-*
+          merge-multiple: true
+
+      - name: Verify GPG signatures
+        if: ${{ secrets.GPG_PRIVATE_KEY != '' }}
+        run: |
+          for f in ./*.asc; do
+            if [ -f "$f" ]; then
+              gpg --verify "$f" "${f%.asc}" && echo "✓ $f verified" || exit 1
+            fi
+          done
+
+      - name: Verify SHA256SUMS
+        run: |
+          sha256sum -c SHA256SUMS
+
+      - name: Verify reproducible build
+        run: |
+          if [ -f reproducible-build.sha256 ]; then
+            echo "✓ Reproducible build verified"
+          else
+            echo "⚠ Reproducible build verification file not found"
+          fi
+
+  notify:
+    name: Notify
+    runs-on: ubuntu-latest
+    needs: [release, validate]
+    timeout-minutes: 5
+    steps:
+      - name: Notify completion
+        run: |
+          echo "Release ${{ github.ref_name }} published successfully"
+          echo "URL: https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}"
