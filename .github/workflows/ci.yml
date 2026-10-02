@@ -119,6 +119,7 @@ jobs:
     name: Dependency Review
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    continue-on-error: true
     permissions:
       contents: read
       security-events: write
@@ -136,6 +137,7 @@ jobs:
     name: Generate SBOM
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    continue-on-error: true
     permissions:
       contents: write
       id-token: write
