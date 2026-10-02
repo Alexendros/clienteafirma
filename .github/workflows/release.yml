@@ -47,8 +47,8 @@ jobs:
         run: |
           bash scripts/f2-regression.sh
 
-      - name: 'SEC-2026-010: Verify reproducible JAR build'
-        name: Verify reproducible JAR build
+      - name: SEC-2026-010: Verify reproducible JAR build
+        name: "SEC-2026-010: Verify reproducible JAR build"
         run: |
           mkdir -p verify-reproducible
           cd verify-reproducible
