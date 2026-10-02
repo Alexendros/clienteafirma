@@ -1,0 +1,27 @@
+# Configuration for Dependency Review
+# https://github.com/actions/dependency-review-action
+
+# Fail on high severity vulnerabilities
+fail-on-severity: high
+
+# Allow specific vulnerabilities if needed (use sparingly)
+# allow-vulnerabilities:
+#   - CVE-2024-XXXXX
+
+# Severity thresholds
+severity-threshold: high
+
+# Exclude dev dependencies from checks (if applicable)
+# exclude-dev-dependencies: true
+
+# Alert on license violations
+# license-policy:
+#   allowed-licenses:
+#     - MIT
+#     - Apache-2.0
+#     - BSD-3-Clause
+#     - GPL-2.0-or-later
+#     - EUPL-1.1
+
+# Alert on deprecated packages
+# deprecated-packages: true
