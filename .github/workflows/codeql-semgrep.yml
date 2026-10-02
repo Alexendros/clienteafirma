@@ -56,6 +56,17 @@ jobs:
         uses: github/codeql-action/analyze@75d92147bd8ad1d8e9ea662d0c4b3d2e4c9d8d7e # v3.25.2
         with:
           category: "/language:${{ matrix.language }}"
+          upload: true
+
+      - name: Upload CodeQL SARIF as artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: codeql-results
+          path: |
+            **/codeql-*.sarif
+            **/*codeql*.sarif
+          if-no-files-found: ignore
+          retention-days: 7
 
   semgrep:
     name: Semgrep
@@ -83,11 +94,19 @@ jobs:
             --sarif --output=semgrep.sarif \
             --error --max-target-bytes=1000000 || true
 
-      - name: Upload Semgrep SARIF
+      - name: Upload Semgrep SARIF to code scanning
         uses: github/codeql-action/upload-sarif@75d92147bd8ad1d8e9ea662d0c4b3d2e4c9d8d7e
         with:
           sarif_file: semgrep.sarif
           category: semgrep
+
+      - name: Upload Semgrep SARIF as artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: semgrep-results
+          path: semgrep.sarif
+          if-no-files-found: ignore
+          retention-days: 7
 
   sarif-merge:
     name: Merge SARIF
@@ -103,16 +122,25 @@ jobs:
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: codeql-results
-          path: sarif/
+          path: sarif/codeql
 
       - name: Download Semgrep SARIF
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: semgrep-results
-          path: sarif/
+          path: sarif/semgrep
+
+      - name: Merge SARIF files
+        run: |
+          mkdir -p sarif/merged
+          # CodeQL uploads multiple SARIF files, Semgrep uploads one
+          # The upload-sarif action can accept a directory and will merge them
+          cp -r sarif/codeql/* sarif/merged/ 2>/dev/null || true
+          cp -r sarif/semgrep/* sarif/merged/ 2>/dev/null || true
+          ls -la sarif/merged/
 
       - name: Upload merged SARIF
         uses: github/codeql-action/upload-sarif@75d92147bd8ad1d8e9ea662d0c4b3d2e4c9d8d7e
         with:
-          sarif_file: sarif/
+          sarif_file: sarif/merged
           category: merged

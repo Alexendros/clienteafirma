@@ -27,7 +27,7 @@ public final class TestEssCertIdAsn1 {
 	/** Pruebas de codificaci&oacute;n de ESSCertIDv2.
 	 * @throws Exception En cualquier error. */
 	@SuppressWarnings("static-method")
-	@Ignore
+	@Ignore("Prueba no ejecutada en CI / requiere configuración específica")
 	@Test
 	public void TestEssCertIdAsn1DefaultValue() throws Exception {
 		final ESSCertIDv2 essCertIDv2WithOid = new ESSCertIDv2(
