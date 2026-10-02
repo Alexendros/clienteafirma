@@ -26,7 +26,7 @@ public final class TestCertUtil {
 	 * @throws Exception En cualquier error. */
 	@SuppressWarnings("static-method")
 	@Test
-	@Ignore
+	@Ignore("Prueba no ejecutada en CI / requiere configuración específica")
 	public void testSslpkcs12Generation() throws Exception {
 		final CertPack certPack = CertUtil.getCertPackForHostSsl(
             "tomcat",          // Alias del certificado SSL //$NON-NLS-1$

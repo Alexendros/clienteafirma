@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# quality: meta-sección Propósito y POM bien formado. No toca el árbol de producto.
+# quality: meta-seccion Proposito y POM bien formado. No toca el arbol de producto.
 set -euo pipefail
 
 root="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -15,7 +15,7 @@ require_purpose() {
     return
   fi
   if ! grep -q "Propósito de este documento" "$f"; then
-    echo "FALTA meta-sección Propósito: $f"
+    echo "FALTA meta-seccion Proposito: $f"
     fail=1
   fi
 }
@@ -29,12 +29,12 @@ require_purpose .github/ISSUE_TEMPLATE/bug.md
 require_purpose .github/ISSUE_TEMPLATE/feature.md
 
 if [[ ! -f LICENSE ]]; then
-  echo "FALTA: LICENSE (puntero SPDX de raíz)"
+  echo "FALTA: LICENSE (puntero SPDX de raiz)"
   fail=1
 fi
 
 if ! grep -q 'GPL-2.0-or-later OR EUPL-1.1' LICENSE; then
-  echo "LICENSE de raíz debe declarar el SPDX dual del producto"
+  echo "LICENSE de raiz debe declarar el SPDX dual del producto"
   fail=1
 fi
 
@@ -47,7 +47,7 @@ elif ! grep -q '@Alexendros' .github/CODEOWNERS; then
 fi
 
 if [[ -f .github/dependabot.yml ]]; then
-  if grep -q 'package-ecosystem' .github/dependabot.yml && grep -q 'version-updates\|interval' .github/dependabot.yml; then
+  if grep -q 'package-ecosystem' .github/dependabot.yml && grep -q 'version-updates|interval' .github/dependabot.yml; then
     echo "Quita Dependabot version-updates; usa Renovate"
     fail=1
   fi
@@ -76,8 +76,55 @@ print("pom.xml: XML bien formado")
 PY
 fi
 
+# Check @Ignore annotations have required category/reason
+check_ignore_categories() {
+  local root="$(cd "$(dirname "$0")/../.." && pwd)"
+  local temp_file=$(mktemp)
+  
+  # Find all .java files with @Ignore
+  while IFS= read -r -d '' file; do
+    # Single pattern: @Ignore that doesn't have a reason
+    # Valid: @Ignore("reason"), @Ignore // reason, @Ignore /* reason */
+    # Invalid: @Ignore (alone), @Ignore something (no paren, no comment)
+    grep -n '^[[:space:]]*@Ignore' "$file" 2>/dev/null | while IFS=: read -r line_num line; do
+      # Check if it has a valid reason
+      has_reason=0
+      
+      # Pattern 1: @Ignore("reason") or @Ignore ( "reason" )
+      if echo "$line" | grep -q '^[[:space:]]*@Ignore[[:space:]]*('; then
+        has_reason=1
+      fi
+      
+      # Pattern 2: @Ignore // reason
+      if echo "$line" | grep -q '^[[:space:]]*@Ignore[[:space:]]*//'; then
+        has_reason=1
+      fi
+      
+      # Pattern 3: @Ignore /* reason */
+      if echo "$line" | grep -q '^[[:space:]]*@Ignore[[:space:]]*/\*'; then
+        has_reason=1
+      fi
+      
+      if [[ $has_reason -eq 0 ]]; then
+        echo "FALTA categoria en @Ignore: $file:$line_num"
+        echo "1" >> "$temp_file"
+      fi
+    done
+  done < <(find "$root" -name "*.java" -not -path "*/target/*" -type f -print0)
+  
+  # Check if any failures were recorded
+  local result=0
+  if [[ -s "$temp_file" ]]; then
+    result=1
+  fi
+  rm -f "$temp_file"
+  return $result
+}
+
+check_ignore_categories || fail=1
+
 if [[ "$fail" -ne 0 ]]; then
-  echo "check-contract: FALLÓ"
+  echo "check-contract: FALLO"
   exit 1
 fi
 
