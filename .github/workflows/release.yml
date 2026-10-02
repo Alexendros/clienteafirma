@@ -47,7 +47,6 @@ jobs:
         run: |
           bash scripts/f2-regression.sh
 
-      - name: SEC-2026-010: Verify reproducible JAR build
         name: "SEC-2026-010: Verify reproducible JAR build"
         run: |
           mkdir -p verify-reproducible
@@ -70,8 +69,8 @@ jobs:
           
           # Compare hashes
           cd ..
-          sha256_1=$(cat build1.sha256 | cut -d' ' -f1)
-          sha256_2=$(cat build2.sha256 | cut -d' ' -f1)
+          sha256_1=$($(cut -d' ' -f1 build1.sha256))
+          sha256_2=$(cut -d' ' -f1 build2.sha256)
           
           echo "Build 1 SHA256: $sha256_1"
           echo "Build 2 SHA256: $sha256_2"
@@ -127,7 +126,7 @@ jobs:
         if: ${{ secrets.GPG_PRIVATE_KEY != '' }}
         run: |
           cd release-artifacts
-          for f in *; do
+          for f in ./*; do
             if [ -f "$f" ]; then
               gpg --armor --detach-sign --output "$f.asc" "$f"
             fi
@@ -214,7 +213,7 @@ jobs:
       - name: Verify GPG signatures
         if: ${{ secrets.GPG_PRIVATE_KEY != '' }}
         run: |
-          for f in *.asc; do
+          for f in ./*.asc; do
             if [ -f "$f" ]; then
               gpg --verify "$f" "${f%.asc}" && echo "✓ $f verified" || exit 1
             fi
