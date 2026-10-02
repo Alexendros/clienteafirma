@@ -90,10 +90,15 @@ jobs:
           git worktree remove ../worktree2 --force
 
       - name: Import GPG key
-        if: ${{ secrets.GPG_PRIVATE_KEY != '' }}
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
         run: |
-          printf '%s' "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --import --batch --yes
-          gpg --list-secret-keys --keyid-format LONG
+          if [ -n "$GPG_PRIVATE_KEY" ]; then
+            printf '%s' "$GPG_PRIVATE_KEY" | gpg --import --batch --yes
+            gpg --list-secret-keys --keyid-format LONG
+          else
+            echo "GPG_PRIVATE_KEY not set, skipping GPG import"
+          fi
 
       - name: Install appimagetool and FUSE
         run: |
@@ -123,20 +128,30 @@ jobs:
           find . -maxdepth 1 -type f -exec sha256sum {} + > SHA256SUMS
 
       - name: Sign artifacts with GPG
-        if: ${{ secrets.GPG_PRIVATE_KEY != '' }}
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
         run: |
-          cd release-artifacts
-          find . -maxdepth 1 -type f -name '*.jar' -o -name '*.deb' -o -name '*.rpm' -o -name '*.AppImage' -o -name '*.flatpak' -o -name '*.sha256' | while read -r f; do
-            if [ -f "$f" ]; then
-              gpg --armor --detach-sign --output "$f.asc" "$f"
-            fi
-          done
+          if [ -n "$GPG_PRIVATE_KEY" ]; then
+            cd release-artifacts
+            find . -maxdepth 1 -type f \( -name '*.jar' -o -name '*.deb' -o -name '*.rpm' -o -name '*.AppImage' -o -name '*.flatpak' -o -name '*.sha256' \) | while read -r f; do
+              if [ -f "$f" ]; then
+                gpg --armor --detach-sign --output "$f.asc" "$f"
+              fi
+            done
+          else
+            echo "GPG_PRIVATE_KEY not set, skipping artifact signing"
+          fi
 
       - name: Sign SHA256SUMS with GPG
-        if: ${{ secrets.GPG_PRIVATE_KEY != '' }}
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
         run: |
-          cd release-artifacts
-          gpg --armor --detach-sign --output SHA256SUMS.asc SHA256SUMS
+          if [ -n "$GPG_PRIVATE_KEY" ]; then
+            cd release-artifacts
+            gpg --armor --detach-sign --output SHA256SUMS.asc SHA256SUMS
+          else
+            echo "GPG_PRIVATE_KEY not set, skipping SHA256SUMS signing"
+          fi
 
       - name: Generate SBOM with CycloneDX
         run: |
@@ -145,7 +160,7 @@ jobs:
 
       - name: Create Release Notes
         run: |
-          printf '%s\n' '## Autofirma ${{ github.ref_name }}' '' '### Qué incluye' '- JAR autoejecutable (`autofirma.jar`)' '- Paquete DEB (Debian/Ubuntu)' '- Paquete RPM (Fedora/RHEL/openSUSE)' '- AppImage (universal Linux)' '- Flatpak (cuando esté disponible)' '- Checksums SHA256 para cada artefacto' '- SBOM (CycloneDX JSON)' '- Firmas GPG (`.asc`) y checksums SHA256' '' '### Verificación' '```bash' '# Verificar firma GPG' 'gpg --verify autofirma-${{ github.ref_name }}.jar.asc autofirma-${{ github.ref_name }}.jar' '' '# Verificar checksum' 'sha256sum -c SHA256SUMS' '```' '' '### Cambios' 'Ver [CHANGELOG.md](CHANGELOG.md) para detalles.' '' '### Licencia' 'GPL-2.0+ / EUPL-1.1' > release-notes.md
+          printf '%s\n' "## Autofirma ${{ github.ref_name }}" "" "### Qué incluye" "- JAR autoejecutable (\`autofirma.jar\`)" "- Paquete DEB (Debian/Ubuntu)" "- Paquete RPM (Fedora/RHEL/openSUSE)" "- AppImage (universal Linux)" "- Flatpak (cuando esté disponible)" "- Checksums SHA256 para cada artefacto" "- SBOM (CycloneDX JSON)" "- Firmas GPG (\`.asc\`) y checksums SHA256" "" "### Verificación" "\`\`\`bash" "# Verificar firma GPG" "gpg --verify autofirma-${{ github.ref_name }}.jar.asc autofirma-${{ github.ref_name }}.jar" "" "# Verificar checksum" "sha256sum -c SHA256SUMS" "\`\`\`" "" "### Cambios" "Ver [CHANGELOG.md](CHANGELOG.md) para detalles." "" "### Licencia" "GPL-2.0+ / EUPL-1.1" > release-notes.md
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -166,7 +181,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Attest SBOM
-        if: ${{ github.repository == 'Soluciones-Alexendros/clienteafirma-alexendros' }}
+        if: github.repository == 'Soluciones-Alexendros/clienteafirma-alexendros'
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: release-artifacts/bom.json
@@ -184,13 +199,18 @@ jobs:
           merge-multiple: true
 
       - name: Verify GPG signatures
-        if: ${{ secrets.GPG_PRIVATE_KEY != '' }}
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
         run: |
-          find . -maxdepth 1 -type f -name '*.asc' | while read -r f; do
-            if [ -f "$f" ]; then
-              gpg --verify "$f" "${f%.asc}" && echo "✓ $f verified" || exit 1
-            fi
-          done
+          if [ -n "$GPG_PRIVATE_KEY" ]; then
+            find . -maxdepth 1 -type f -name '*.asc' | while read -r f; do
+              if [ -f "$f" ]; then
+                gpg --verify "$f" "${f%.asc}" && echo "✓ $f verified" || exit 1
+              fi
+            done
+          else
+            echo "GPG_PRIVATE_KEY not set, skipping GPG signature verification"
+          fi
 
       - name: Verify SHA256SUMS
         run: |
